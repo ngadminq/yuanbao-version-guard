@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.venv*/
+searchpro_minimal.py
+my_code*.py
+my_code*.json

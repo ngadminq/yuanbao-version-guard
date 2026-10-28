@@ -1,0 +1,153 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>版本核验运行记录</title>
+<style>
+:root{--bg:#f7f7f5;--fg:#1d1d1f;--dim:#6e6e73;--card:#fff;--line:#e3e3e0;--bad:#c0392b;--warn:#b7791f;--ok:#2f855a;--code:#f0f0ec}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.6 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:22px;margin:0 0 4px} h2{font-size:17px;margin:0 0 10px}
+.sub{color:var(--dim);margin-bottom:20px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:0 0 18px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#fafaf8;font-weight:600}
+code,pre{background:var(--code);border-radius:4px;font:12px/1.5 Consolas,"Cascadia Mono",monospace}
+code{padding:1px 4px} pre{padding:12px;overflow-x:auto;white-space:pre-wrap;margin:0}
+.bad{color:var(--bad)} .warn{color:var(--warn)} .ok{color:var(--ok)} .dim{color:var(--dim)}
+.ev{color:var(--dim);font-size:12px} .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.note{color:var(--dim);font-size:12px;margin-top:8px}
+</style></head><body><main>
+<h1>版本核验助手 · 运行记录</h1>
+<div class="sub">本页只读取本地保存的真实调用记录（data/cache、data/*.json、answers/），不发送任何请求。记录时间：2026-10-27T10:11:30（实验 1）、2026-10-27T10:12:37（实验 2）。</div>
+<section id="overview"><h2>运行概览</h2><table class=""><thead><tr><th>项目</th><th>数值</th></tr></thead><tbody><tr><td>元宝 SearchPro 真实调用（缓存记录）</td><td>186 次，HTTP 200：186 次</td></tr><tr><td>端到端耗时（本机，含网络）</td><td>中位数 493 ms，范围 268–896 ms</td></tr><tr><td>返回结果项</td><td>1852 条；docs.python.org 1117 条，其中翻译版 1022 条（91%），3.11 及更早版本 357 条（32%）</td></tr><tr><td>本地模型</td><td>Qwen3.8-27B-FP8（vLLM），reasoning_effort=medium，32 题合计 30 s，单题 247–3690 ms</td></tr><tr><td>模型写出过时 API</td><td>9/28（32.1%）</td></tr><tr><td>定向核验检出变更（实验 1）</td><td>20/28，状态完全一致 16/28</td></tr><tr><td>全自动扫描（实验 2）</td><td>抓到过时回答 4/9；检查符号 136 个；标记 27 条，复核正确 5 条（18.5%）；对照题标记 1 条</td></tr></tbody></table></section>
+<section id="example"><h2>单条核验：本地 Qwen 给出的 Windows asyncio 修复代码</h2>
+<div class="grid"><div><div class="note">模型回答（原样）</div><pre>```python
+import asyncio
+import sys
+
+if sys.platform == &quot;win32&quot;:
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+async def main():
+    # 你的异步逻辑
+    await asyncio.sleep(1)
+    print(&quot;done&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    asyncio.run(main())
+```</pre></div>
+<div><div class="note">python version_guard.py check examples/qwen_loop_policy.md</div><pre>| 位置 | 符号 | 判定 | 证据 |
+|---|---|---|---|
+| L5 | `asyncio.WindowsSelectorEventLoopPolicy` | ⚠️ 已弃用 | following classes and functions are deprecated: asyncio.AbstractEventLoopPolicy asyncio.DefaultEventLoopPolicy asyncio.W (https://docs.python.org/id/3.15/deprecations/pending-removal-in-3.16.html) |
+| L5 | `asyncio.set_event_loop_policy` | ⚠️ 已弃用 | 自 3.14 版本弃用: set_event_loop_policy() 函数已弃用,并将在 Python 3.16 中删除。 (https://docs.python.org/zh-cn/3.14/library/asyncio-policy.html) |
+| L9 | `asyncio.sleep` | · 文档提及，无变更描述 |  |
+| L13 | `asyncio.run` | · 文档提及，无变更描述 |  |
+| L1 | `asyncio` | · 官方文档未检出 |  |
+| L2 | `sys` | · 官方文档未检出 |  |
+| L4 | `sys.platform` | · 官方文档未检出 |  |</pre></div></div></section>
+<section id="probe"><h2>实验 1：定向核验 28 项已知变更（Site 限定官方域名，Cnt=10）</h2>
+<table class=""><thead><tr><th>用例</th><th>Query</th><th>Site</th><th>官方结果</th><th>工具判定</th><th>标准答案</th><th>检出</th><th>RequestId</th></tr></thead><tbody><tr><td>py-utcnow</td><td><code>python datetime utcnow deprecated</code></td><td>docs.python.org</td><td>10</td><td><b class="warn">已弃用</b></td><td>deprecated</td><td>✓</td><td><code>834af036…</code></td></tr><tr><td>py-distutils</td><td><code>python distutils removed</code></td><td>docs.python.org</td><td>10</td><td><b class="bad">已删除/行为变更</b></td><td>breaking</td><td>✓</td><td><code>fc56680f…</code></td></tr><tr><td>py-imp</td><td><code>python imp module removed importlib</code></td><td>docs.python.org</td><td>10</td><td><b class="bad">已删除/行为变更</b></td><td>breaking</td><td>✓</td><td><code>638878da…</code></td></tr><tr><td>py-wrap-socket</td><td><code>python ssl.wrap_socket removed</code></td><td>docs.python.org</td><td>10</td><td><b class="bad">已删除/行为变更</b></td><td>breaking</td><td>✓</td><td><code>255c12c3…</code></td></tr><tr><td>py-safeconfigparser</td><td><code>python configparser SafeConfigParser removed</code></td><td>docs.python.org</td><td>10</td><td><b class="bad">已删除/行为变更</b></td><td>breaking</td><td>✓</td><td><code>af52b614…</code></td></tr><tr><td>py-assertequals</td><td><code>python unittest assertEquals removed alias</code></td><td>docs.python.org</td><td>10</td><td><b class="warn">已弃用</b></td><td>breaking</td><td>✓</td><td><code>d1b1220e…</code></td></tr><tr><td>py-cgi</td><td><code>python cgi module removed 3.13</code></td><td>docs.python.org</td><td>10</td><td><b class="bad">已删除/行为变更</b></td><td>breaking</td><td>✓</td><td><code>5d9d0e97…</code></td></tr><tr><td>py-telnetlib</td><td><code>python telnetlib removed 3.13</code></td><td>docs.python.org</td><td>10</td><td><b class="bad">已删除/行为变更</b></td><td>breaking</td><td>✓</td><td><code>f1948acd…</code></td></tr><tr><td>py-pipes</td><td><code>python pipes module removed shlex.quote</code></td><td>docs.python.org</td><td>10</td><td><b class="bad">已删除/行为变更</b></td><td>breaking</td><td>✓</td><td><code>7b4d59e2…</code></td></tr><tr><td>py-imghdr</td><td><code>python imghdr removed 3.13</code></td><td>docs.python.org</td><td>10</td><td><b class="bad">已删除/行为变更</b></td><td>breaking</td><td>✓</td><td><code>affb43cb…</code></td></tr><tr><td>py-get-event-loop</td><td><code>python asyncio get_event_loop RuntimeError 3.14</code></td><td>docs.python.org</td><td>10</td><td><b class="bad">已删除/行为变更</b></td><td>breaking</td><td>✓</td><td><code>d0f1a1dd…</code></td></tr><tr><td>py-ast-num</td><td><code>python ast.Num removed 3.14 Constant</code></td><td>docs.python.org</td><td>10</td><td><b class="bad">已删除/行为变更</b></td><td>breaking</td><td>✓</td><td><code>e15bb8f4…</code></td></tr><tr><td>py-loop-policy</td><td><code>python asyncio set_event_loop_policy deprecated</code></td><td>docs.python.org</td><td>10</td><td><b class="warn">已弃用</b></td><td>deprecated</td><td>✓</td><td><code>80b67be3…</code></td></tr><tr><td>py-sqlite-version</td><td><code>python sqlite3 version version_info removed</code></td><td>docs.python.org</td><td>10</td><td><span class="dim">提及，无变更描述</span></td><td>breaking</td><td>✗</td><td><code>9fe986c6…</code></td></tr><tr><td>pd-append</td><td><code>pandas DataFrame.append removed concat</code></td><td>pandas.pydata.org</td><td>10</td><td><b class="warn">已弃用</b></td><td>breaking</td><td>✓</td><td><code>d502680f…</code></td></tr><tr><td>pd-applymap</td><td><code>pandas DataFrame.applymap removed map</code></td><td>pandas.pydata.org</td><td>10</td><td><b class="warn">已弃用</b></td><td>breaking</td><td>✓</td><td><code>04e22b5c…</code></td></tr><tr><td>pd-fillna-method</td><td><code>pandas fillna method keyword removed ffill</code></td><td>pandas.pydata.org</td><td>10</td><td><span class="dim">提及，无变更描述</span></td><td>breaking</td><td>✗</td><td><code>2d715260…</code></td></tr><tr><td>pd-delim-whitespace</td><td><code>pandas read_csv delim_whitespace removed</code></td><td>pandas.pydata.org</td><td>10</td><td><span class="dim">提及，无变更描述</span></td><td>breaking</td><td>✗</td><td><code>e27ddfb6…</code></td></tr><tr><td>pd-freq-h</td><td><code>pandas frequency alias H deprecated h</code></td><td>pandas.pydata.org</td><td>10</td><td><span class="dim">未检出</span></td><td>breaking</td><td>✗</td><td><code>66bd3c61…</code></td></tr><tr><td>pd-resample-m</td><td><code>pandas resample alias M removed ME MonthEnd</code></td><td>pandas.pydata.org</td><td>10</td><td><span class="dim">未检出</span></td><td>breaking</td><td>✗</td><td><code>a211c2d0…</code></td></tr><tr><td>pd-groupby-axis</td><td><code>pandas groupby axis argument removed</code></td><td>pandas.pydata.org</td><td>10</td><td><span class="dim">提及，无变更描述</span></td><td>breaking</td><td>✗</td><td><code>03afaa3a…</code></td></tr><tr><td>np-float_</td><td><code>numpy np.float_ removed numpy 2.0</code></td><td>numpy.org</td><td>10</td><td><span class="dim">未检出</span></td><td>breaking</td><td>✗</td><td><code>73a13df6…</code></td></tr><tr><td>np-nan</td><td><code>numpy np.NaN removed numpy 2.0 np.nan</code></td><td>numpy.org</td><td>10</td><td><span class="dim">提及，无变更描述</span></td><td>breaking</td><td>✗</td><td><code>b7b310a1…</code></td></tr><tr><td>np-product</td><td><code>numpy np.product cumproduct removed 2.0</code></td><td>numpy.org</td><td>10</td><td><b class="warn">已弃用</b></td><td>breaking</td><td>✓</td><td><code>11f917f5…</code></td></tr><tr><td>np-trapz</td><td><code>numpy trapz deprecated trapezoid</code></td><td>numpy.org</td><td>10</td><td><b class="warn">已弃用</b></td><td>deprecated</td><td>✓</td><td><code>28d70dd2…</code></td></tr><tr><td>np-in1d</td><td><code>numpy in1d deprecated isin</code></td><td>numpy.org</td><td>10</td><td><b class="warn">已弃用</b></td><td>deprecated</td><td>✓</td><td><code>2c8363ff…</code></td></tr><tr><td>lc-react-agent</td><td><code>langgraph create_react_agent deprecated create_agent</code></td><td>docs.langchain.com</td><td>10</td><td><b class="warn">已弃用</b></td><td>deprecated</td><td>✓</td><td><code>89cff2ed…</code></td></tr><tr><td>oa-assistants</td><td><code>OpenAI Assistants API deprecated Responses API</code></td><td>developers.openai.com</td><td>10</td><td><b class="bad">已删除/行为变更</b></td><td>breaking</td><td>✓</td><td><code>901a8cd5…</code></td></tr></tbody></table></section>
+<section id="run"><h2>实验 2：全自动扫描本地 Qwen 的 32 份回答</h2>
+<table class=""><thead><tr><th>用例</th><th>标准答案</th><th>回答是否过时</th><th>工具是否抓到</th><th>检查符号数</th><th>标记数</th></tr></thead><tbody><tr><td>py-utcnow</td><td>deprecated</td><td>—</td><td>—</td><td>5</td><td>1</td></tr><tr><td>py-distutils</td><td>breaking</td><td>—</td><td>—</td><td>4</td><td>0</td></tr><tr><td>py-imp</td><td>breaking</td><td>—</td><td>—</td><td>2</td><td>2</td></tr><tr><td>py-wrap-socket</td><td>breaking</td><td>—</td><td>—</td><td>9</td><td>3</td></tr><tr><td>py-safeconfigparser</td><td>breaking</td><td>—</td><td>—</td><td>2</td><td>2</td></tr><tr><td>py-assertequals</td><td>breaking</td><td>—</td><td>—</td><td>5</td><td>2</td></tr><tr><td>py-cgi</td><td>breaking</td><td>—</td><td>—</td><td>11</td><td>1</td></tr><tr><td>py-telnetlib</td><td>breaking</td><td><b class="bad">过时</b></td><td>✓ 抓到</td><td>7</td><td>1</td></tr><tr><td>py-pipes</td><td>breaking</td><td>—</td><td>—</td><td>6</td><td>1</td></tr><tr><td>py-imghdr</td><td>breaking</td><td>—</td><td>—</td><td>2</td><td>1</td></tr><tr><td>py-get-event-loop</td><td>breaking</td><td>—</td><td>—</td><td>3</td><td>0</td></tr><tr><td>py-ast-num</td><td>breaking</td><td>—</td><td>—</td><td>8</td><td>0</td></tr><tr><td>py-loop-policy</td><td>deprecated</td><td><b class="bad">过时</b></td><td>✓ 抓到</td><td>7</td><td>2</td></tr><tr><td>py-sqlite-version</td><td>breaking</td><td><b class="bad">过时</b></td><td>✗ 漏掉</td><td>3</td><td>1</td></tr><tr><td>pd-append</td><td>breaking</td><td>—</td><td>—</td><td>1</td><td>0</td></tr><tr><td>pd-applymap</td><td>breaking</td><td><b class="bad">过时</b></td><td>✓ 抓到</td><td>2</td><td>1</td></tr><tr><td>pd-fillna-method</td><td>breaking</td><td><b class="bad">过时</b></td><td>✗ 漏掉</td><td>2</td><td>0</td></tr><tr><td>pd-delim-whitespace</td><td>breaking</td><td>—</td><td>—</td><td>3</td><td>1</td></tr><tr><td>pd-freq-h</td><td>breaking</td><td><b class="bad">过时</b></td><td>✗ 漏掉</td><td>4</td><td>0</td></tr><tr><td>pd-resample-m</td><td>breaking</td><td>—</td><td>—</td><td>2</td><td>0</td></tr><tr><td>pd-groupby-axis</td><td>breaking</td><td><b class="bad">过时</b></td><td>✗ 漏掉</td><td>2</td><td>0</td></tr><tr><td>np-float_</td><td>breaking</td><td>—</td><td>—</td><td>3</td><td>1</td></tr><tr><td>np-nan</td><td>breaking</td><td>—</td><td>—</td><td>3</td><td>1</td></tr><tr><td>np-product</td><td>breaking</td><td>—</td><td>—</td><td>3</td><td>1</td></tr><tr><td>np-trapz</td><td>deprecated</td><td><b class="bad">过时</b></td><td>✓ 抓到</td><td>4</td><td>2</td></tr><tr><td>np-in1d</td><td>deprecated</td><td>—</td><td>—</td><td>2</td><td>1</td></tr><tr><td>lc-react-agent</td><td>deprecated</td><td><b class="bad">过时</b></td><td>✗ 漏掉</td><td>7</td><td>0</td></tr><tr><td>oa-assistants</td><td>breaking</td><td>—</td><td>—</td><td>7</td><td>1</td></tr><tr><td>ctl-json</td><td>current</td><td>—</td><td>—</td><td>2</td><td>0</td></tr><tr><td>ctl-pathlib</td><td>current</td><td>—</td><td>—</td><td>6</td><td>1</td></tr><tr><td>ctl-groupby</td><td>current</td><td>—</td><td>—</td><td>1</td><td>0</td></tr><tr><td>ctl-requests</td><td>current</td><td>—</td><td>—</td><td>8</td><td>0</td></tr></tbody></table></section>
+<section id="versions"><h2>规则迭代：每一版都保留了结果</h2>
+<table class=""><thead><tr><th>规则版本</th><th>实验1 检出</th><th>实验1 状态一致</th><th>实验2 抓到过时</th><th>实验2 标记数</th><th>对照题标记</th></tr></thead><tbody><tr><td>v1 初版</td><td>20/28</td><td>17/28</td><td>—</td><td>—</td><td>—</td></tr><tr><td>v2 + 替代句规则</td><td>21/28</td><td>18/28</td><td>3/9</td><td>48</td><td>4</td></tr><tr><td>v3 + 代码形态/模块语境</td><td>20/28</td><td>17/28</td><td>4/9</td><td>36</td><td>1</td></tr><tr><td>v4 + 120 字窗口（冻结）</td><td>20/28</td><td>16/28</td><td>4/9</td><td>27</td><td>1</td></tr></tbody></table>
+<div class="note">v1、v2 的检出数各含 1 条误中（delim_whitespace 命中的是 pandas 早期版本 GH 6607 的 “Raise ValueError when sep specified…”），扣除后分别为 19、20；v3 起不再计入。规则在同一批数据上调整，数字偏乐观。</div></section>
+<section id="review"><h2>标记复核表（5/27 正确）</h2>
+<table class=""><thead><tr><th>#</th><th>用例</th><th>符号</th><th>判定</th><th>复核</th><th>理由</th><th>证据片段</th></tr></thead><tbody><tr><td>1</td><td>py-utcnow</td><td><code>datetime.datetime.now</code></td><td>deprecated</td><td><b class="bad">错</b></td><td>now 是推荐的替代写法（改用 datetime.now(tz=UTC)），不是过时 API</td><td><span class="ev">datetime: utcnow():請改用 datetime.datetime.now(tz=datetime.UTC)。</span></td></tr><tr><td>2</td><td>py-imp</td><td><code>importlib</code></td><td>deprecated</td><td><b class="bad">错</b></td><td>被弃用的是 importlib.resources 的若干函数，不是 importlib 模块</td><td><span class="ev">contents() is_resource() open_binary() open_text() path() read_binary() read_text() 請改用 importlib.resources.files()。請參閱 importlib-resources:</span></td></tr><tr><td>3</td><td>py-imp</td><td><code>importlib.reload</code></td><td>breaking</td><td><b class="bad">错</b></td><td>Removed reload() 指的是旧的内置 reload，与 importlib.reload 无关</td><td><span class="ev">Removed reload().</span></td></tr><tr><td>4</td><td>py-wrap-socket</td><td><code>ssl</code></td><td>breaking</td><td><b class="bad">错</b></td><td>说的是旧版 OpenSSL 不再支持，ssl 模块本身正常</td><td><span class="ev">在 3.5.3 版的變更: 更新以支援與 OpenSSL 1.1.0 進行連結 在 3.6 版的變更: OpenSSL 0.9.8, 1.0.0 及 1.0.1 版本已被棄用且不再支援。在未來 ssl 模組將需要至少 OpenSSL 1.0.2 版本或 1.1.0 版本。</span></td></tr><tr><td>5</td><td>py-wrap-socket</td><td><code>wrap_socket</code></td><td>breaking</td><td><b class="bad">错</b></td><td>同名陷阱：被删除的是 ssl.wrap_socket()，代码用的是 SSLContext.wrap_socket()（推荐写法）</td><td><span class="ev">(Contributed by Victor Stinner in gh-94199.) Remove the ssl.wrap_socket() function, deprecated in Python 3.7: instead, create a ssl.SSLConte</span></td></tr><tr><td>6</td><td>py-wrap-socket</td><td><code>sendall</code></td><td>breaking</td><td><b class="bad">错</b></td><td>3.5 的行为调整，不需要改代码</td><td><span class="ev">(Contributed by Giampaolo Rodola’ in bpo-17552.) The socket.sendall() method no longer resets the socket timeout every time bytes are receiv</span></td></tr><tr><td>7</td><td>py-safeconfigparser</td><td><code>configparser</code></td><td>breaking</td><td><b class="bad">错</b></td><td>configparser 里个别旧名称被删除，模块本身正常</td><td><span class="ev">dule in PEP 594 ,having been deprecated in Python 3.6.Use asyncio instead.(Contributed by Nikita Sobolev in gh-96580 .) configparser ¶ Sever</span></td></tr><tr><td>8</td><td>py-safeconfigparser</td><td><code>configparser.ConfigParser</code></td><td>breaking</td><td><b class="bad">错</b></td><td>被删除的是 readfp 方法，代码没用到</td><td><span class="ev">configparser.ConfigParser no longer has a readfp method.</span></td></tr><tr><td>9</td><td>py-assertequals</td><td><code>unittest</code></td><td>breaking</td><td><b class="bad">错</b></td><td>unittest 里个别函数被删除，模块本身正常</td><td><span class="ev">(Contributed by Tomas Roun in gh-104786.) unittest¶ Remove the following unittest functions, deprecated in Python 3.11: unittest.findTestCas</span></td></tr><tr><td>10</td><td>py-assertequals</td><td><code>assertEqual</code></td><td>deprecated</td><td><b class="bad">错</b></td><td>assertEqual 是正确名称，表格里同时列出了已弃用的别名</td><td><span class="ev">ng table lists the correct names along with their deprecated aliases: 方法名 Deprecated alias Deprecated alias --- --- --- assertEqual() failUn</span></td></tr><tr><td>11</td><td>py-cgi</td><td><code>html</code></td><td>breaking</td><td><b class="bad">错</b></td><td>旧版本文档页的横幅“不再受支持的旧版本”被当成变更</td><td><span class="ev">html --- 超文本标记语言支持 — Python 3.10.22 文档 Python官方文档。这个文档所针对的是一个已不再受支持的 Python 旧版本。</span></td></tr><tr><td>12</td><td>py-telnetlib</td><td><code>telnetlib</code></td><td>breaking</td><td><b class="ok">对</b></td><td>telnetlib 在 3.13 删除</td><td><span class="ev">telnetlib --- Telnet 用戶端 Python Documentation。Deprecated since version 3.11, removed in version 3.13.</span></td></tr><tr><td>13</td><td>py-pipes</td><td><code>subprocess</code></td><td>deprecated</td><td><b class="bad">错</b></td><td>subprocess 是推荐替代（Use the subprocess module instead）</td><td><span class="ev">Use the subprocess module instead.</span></td></tr><tr><td>14</td><td>py-imghdr</td><td><code>sys.argv</code></td><td>deprecated</td><td><b class="bad">错</b></td><td>无关的 C API 说明</td><td><span class="ev">这将初始化已加载的模块表 (sys.modules),并创建基础模块 builtins, main 和 sys。它还会初始化模块搜索路径 (sys.path)。它不会设置 sys.argv;对于此设置请使用 Python 初始化配置 API。当第二次被调用时(在未先调用 Py_F</span></td></tr><tr><td>15</td><td>py-loop-policy</td><td><code>asyncio.WindowsSelectorEventLoopPolicy</code></td><td>deprecated</td><td><b class="ok">对</b></td><td>事件循环策略类在 3.14 弃用</td><td><span class="ev">following classes and functions are deprecated: asyncio.AbstractEventLoopPolicy asyncio.DefaultEventLoopPolicy asyncio.WindowsSelectorEventL</span></td></tr><tr><td>16</td><td>py-loop-policy</td><td><code>asyncio.set_event_loop_policy</code></td><td>deprecated</td><td><b class="ok">对</b></td><td>set_event_loop_policy 在 3.14 弃用</td><td><span class="ev">自 3.14 版本弃用: set_event_loop_policy() 函数已弃用,并将在 Python 3.16 中删除。</span></td></tr><tr><td>17</td><td>py-sqlite-version</td><td><code>sqlite3</code></td><td>breaking</td><td><b class="bad">错</b></td><td>被删除的是 sqlite3 中未公开的名称</td><td><span class="ev">5.4.Use the aiosmtpd PyPI module or any other asyncio -based server instead.(Contributed by Oleg Iarygin in gh-93243 .) sqlite3 ¶ The follow</span></td></tr><tr><td>18</td><td>pd-applymap</td><td><code>applymap</code></td><td>deprecated</td><td><b class="ok">对</b></td><td>applymap 在 2.1 弃用、3.0 删除；工具给出的是“已弃用”，方向正确</td><td><span class="ev">Deprecated since version 2.1.0: DataFrame.applymap has been deprecated.</span></td></tr><tr><td>19</td><td>pd-delim-whitespace</td><td><code>pandas.read_csv</code></td><td>breaking</td><td><b class="bad">错</b></td><td>header 传 bool 的变更，代码没用到</td><td><span class="ev">ng in header=0 for False and header=1 for True (GH 6113) A bool input to header will now raise a TypeError In : df = pd.read_csv(&#x27;data.csv&#x27;,</span></td></tr><tr><td>20</td><td>np-float_</td><td><code>numpy.array</code></td><td>deprecated</td><td><b class="bad">错</b></td><td>整数越界类型转换的弃用，np.array 本身正常</td><td><span class="ev">This means the following examples will fail in the future and give a DeprecationWarning now: np.uint8(-1) np.array([3000], dtype=np.int8) Ma</span></td></tr><tr><td>21</td><td>np-nan</td><td><code>numpy.array</code></td><td>deprecated</td><td><b class="bad">错</b></td><td>同上：整数越界类型转换的弃用</td><td><span class="ev">This means the following examples will fail in the future and give a DeprecationWarning now: np.uint8(-1) np.array([3000], dtype=np.int8) Ma</span></td></tr><tr><td>22</td><td>np-product</td><td><code>numpy.array</code></td><td>deprecated</td><td><b class="bad">错</b></td><td>同上：整数越界类型转换的弃用</td><td><span class="ev">This means the following examples will fail in the future and give a DeprecationWarning now: np.uint8(-1) np.array([3000], dtype=np.int8) Ma</span></td></tr><tr><td>23</td><td>np-trapz</td><td><code>numpy.linspace</code></td><td>breaking</td><td><b class="bad">错</b></td><td>仅 num 不是整数时才告警，代码传的是 1000</td><td><span class="ev">Unsafe int casting of the num attribute in linspace# np.linspace now raises DeprecationWarning when num cannot be safely interpreted as an i</span></td></tr><tr><td>24</td><td>np-trapz</td><td><code>numpy.trapz</code></td><td>deprecated</td><td><b class="ok">对</b></td><td>trapz 在 2.0 弃用，改用 trapezoid</td><td><span class="ev">trapz Use np.trapezoid or a scipy.integrate function instead.</span></td></tr><tr><td>25</td><td>np-in1d</td><td><code>numpy.array</code></td><td>deprecated</td><td><b class="bad">错</b></td><td>同上：整数越界类型转换的弃用</td><td><span class="ev">This means the following examples will fail in the future and give a DeprecationWarning now: np.uint8(-1) np.array([3000], dtype=np.int8) Ma</span></td></tr><tr><td>26</td><td>oa-assistants</td><td><code>openai.OpenAI</code></td><td>deprecated</td><td><b class="bad">错</b></td><td>被弃用的是 Evals 平台，不是 OpenAI 客户端</td><td><span class="ev">OpenAI is deprecating the Evals platform.</span></td></tr><tr><td>27</td><td>ctl-pathlib</td><td><code>os.path.isdir</code></td><td>breaking</td><td><b class="bad">错</b></td><td>Windows 下的行为调整，不需要改代码</td><td><span class="ev">(由 Anthony Sottile 在 bpo-36264 中贡献。) isdir() 在 Windows 上将不再为不存在的目录的链接返回 True。</span></td></tr></tbody></table>
+<div class="note">复核人：Claude 初审，作者已复核（无改动）</div></section>
+<section id="logs"><h2>终端输出</h2><div class="grid">
+<div><div class="note">python evaluate.py probe</div><pre>py-utcnow              official=10  verdict=deprecated  expected=deprecated
+py-distutils           official=10  verdict=breaking    expected=breaking
+py-imp                 official=10  verdict=breaking    expected=breaking
+py-wrap-socket         official=10  verdict=breaking    expected=breaking
+py-safeconfigparser    official=10  verdict=breaking    expected=breaking
+py-assertequals        official=10  verdict=deprecated  expected=breaking
+py-cgi                 official=10  verdict=breaking    expected=breaking
+py-telnetlib           official=10  verdict=breaking    expected=breaking
+py-pipes               official=10  verdict=breaking    expected=breaking
+py-imghdr              official=10  verdict=breaking    expected=breaking
+py-get-event-loop      official=10  verdict=breaking    expected=breaking
+py-ast-num             official=10  verdict=breaking    expected=breaking
+py-loop-policy         official=10  verdict=deprecated  expected=deprecated
+py-sqlite-version      official=10  verdict=mentioned   expected=breaking
+pd-append              official=10  verdict=deprecated  expected=breaking
+pd-applymap            official=10  verdict=deprecated  expected=breaking
+pd-fillna-method       official=10  verdict=mentioned   expected=breaking
+pd-delim-whitespace    official=10  verdict=mentioned   expected=breaking
+pd-freq-h              official=10  verdict=no_evidence expected=breaking
+pd-resample-m          official=10  verdict=no_evidence expected=breaking
+pd-groupby-axis        official=10  verdict=mentioned   expected=breaking
+np-float_              official=10  verdict=no_evidence expected=breaking
+np-nan                 official=10  verdict=mentioned   expected=breaking
+np-product             official=10  verdict=deprecated  expected=breaking
+np-trapz               official=10  verdict=deprecated  expected=deprecated
+np-in1d                official=10  verdict=deprecated  expected=deprecated
+lc-react-agent         official=10  verdict=deprecated  expected=deprecated
+oa-assistants          official=10  verdict=breaking    expected=breaking
+
+命中官方文档 28/28，检出变更 20/28，状态完全一致 16/28  → data/probe.json</pre></div>
+<div><div class="note">python evaluate.py run --name qwen3.8-27b</div><pre>py-utcnow              stale=False flags=1 target_hit=-
+py-distutils           stale=False flags=0 target_hit=-
+py-imp                 stale=False flags=2 target_hit=-
+py-wrap-socket         stale=False flags=3 target_hit=-
+py-safeconfigparser    stale=False flags=2 target_hit=-
+py-assertequals        stale=False flags=2 target_hit=-
+py-cgi                 stale=False flags=1 target_hit=-
+py-telnetlib           stale=True  flags=1 target_hit=True
+py-pipes               stale=False flags=1 target_hit=-
+py-imghdr              stale=False flags=1 target_hit=-
+py-get-event-loop      stale=False flags=0 target_hit=-
+py-ast-num             stale=False flags=0 target_hit=-
+py-loop-policy         stale=True  flags=2 target_hit=True
+py-sqlite-version      stale=True  flags=1 target_hit=False
+pd-append              stale=False flags=0 target_hit=-
+pd-applymap            stale=True  flags=1 target_hit=True
+pd-fillna-method       stale=True  flags=0 target_hit=False
+pd-delim-whitespace    stale=False flags=1 target_hit=-
+pd-freq-h              stale=True  flags=0 target_hit=False
+pd-resample-m          stale=False flags=0 target_hit=-
+pd-groupby-axis        stale=True  flags=0 target_hit=False
+np-float_              stale=False flags=1 target_hit=-
+np-nan                 stale=False flags=1 target_hit=-
+np-product             stale=False flags=1 target_hit=-
+np-trapz               stale=True  flags=2 target_hit=True
+np-in1d                stale=False flags=1 target_hit=-
+lc-react-agent         stale=True  flags=0 target_hit=False
+oa-assistants          stale=False flags=1 target_hit=-
+ctl-json               stale=False flags=0 target_hit=-
+ctl-pathlib            stale=False flags=1 target_hit=-
+ctl-groupby            stale=False flags=0 target_hit=-
+ctl-requests           stale=False flags=0 target_hit=-
+{
+  &quot;model&quot;: &quot;qwen3.8-27b&quot;,
+  &quot;recorded_at&quot;: &quot;2026-10-27T10:12:37.217243+08:00&quot;,
+  &quot;answers&quot;: 32,
+  &quot;changed_cases&quot;: 28,
+  &quot;stale_answers&quot;: 9,
+  &quot;stale_rate&quot;: 0.321,
+  &quot;guard_caught_stale&quot;: 4,
+  &quot;flags_total&quot;: 27,
+  &quot;flags_on_controls&quot;: 1,
+  &quot;symbols_checked&quot;: 136
+}
+人工复核：data/review_qwen3.8-27b.csv（human_label 填 对/错）</pre></div></div>
+<div class="note" style="margin-top:12px">python -m unittest -v test_version_guard</div><pre>ersion_guard.JudgeTest.test_code_symbol_must_look_like_code) ... ok
+test_migration_table_row (test_version_guard.JudgeTest.test_migration_table_row) ... ok
+test_module_function_matched_by_name (test_version_guard.JudgeTest.test_module_function_matched_by_name) ... ok
+test_module_needs_module_context (test_version_guard.JudgeTest.test_module_needs_module_context) ... ok
+test_non_official_domain_ignored (test_version_guard.JudgeTest.test_non_official_domain_ignored) ... ok
+test_normal_error_behaviour_is_not_a_change (test_version_guard.JudgeTest.test_normal_error_behaviour_is_not_a_change) ... ok
+test_owner_class_is_not_flagged (test_version_guard.JudgeTest.test_owner_class_is_not_flagged) ... ok
+test_pending_removal_is_deprecated (test_version_guard.JudgeTest.test_pending_removal_is_deprecated) ... ok
+test_possessive_owner_not_flagged (test_version_guard.JudgeTest.test_possessive_owner_not_flagged) ... ok
+test_prose_remove_is_not_removal (test_version_guard.JudgeTest.test_prose_remove_is_not_removal) ... ok
+test_removed_sentence (test_version_guard.JudgeTest.test_removed_sentence) ... ok
+test_replacement_is_not_flagged (test_version_guard.JudgeTest.test_replacement_is_not_flagged) ... ok
+test_section_label_not_flagged (test_version_guard.JudgeTest.test_section_label_not_flagged) ... ok
+test_status_word_must_be_near_symbol (test_version_guard.JudgeTest.test_status_word_must_be_near_symbol) ... ok
+test_strict_then_loose (test_version_guard.JudgeTest.test_strict_then_loose) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.014s
+
+OK</pre></section>
+</main></body></html>

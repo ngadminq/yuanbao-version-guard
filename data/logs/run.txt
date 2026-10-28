@@ -1,0 +1,45 @@
+py-utcnow              stale=False flags=1 target_hit=-
+py-distutils           stale=False flags=0 target_hit=-
+py-imp                 stale=False flags=2 target_hit=-
+py-wrap-socket         stale=False flags=3 target_hit=-
+py-safeconfigparser    stale=False flags=2 target_hit=-
+py-assertequals        stale=False flags=2 target_hit=-
+py-cgi                 stale=False flags=1 target_hit=-
+py-telnetlib           stale=True  flags=1 target_hit=True
+py-pipes               stale=False flags=1 target_hit=-
+py-imghdr              stale=False flags=1 target_hit=-
+py-get-event-loop      stale=False flags=0 target_hit=-
+py-ast-num             stale=False flags=0 target_hit=-
+py-loop-policy         stale=True  flags=2 target_hit=True
+py-sqlite-version      stale=True  flags=1 target_hit=False
+pd-append              stale=False flags=0 target_hit=-
+pd-applymap            stale=True  flags=1 target_hit=True
+pd-fillna-method       stale=True  flags=0 target_hit=False
+pd-delim-whitespace    stale=False flags=1 target_hit=-
+pd-freq-h              stale=True  flags=0 target_hit=False
+pd-resample-m          stale=False flags=0 target_hit=-
+pd-groupby-axis        stale=True  flags=0 target_hit=False
+np-float_              stale=False flags=1 target_hit=-
+np-nan                 stale=False flags=1 target_hit=-
+np-product             stale=False flags=1 target_hit=-
+np-trapz               stale=True  flags=2 target_hit=True
+np-in1d                stale=False flags=1 target_hit=-
+lc-react-agent         stale=True  flags=0 target_hit=False
+oa-assistants          stale=False flags=1 target_hit=-
+ctl-json               stale=False flags=0 target_hit=-
+ctl-pathlib            stale=False flags=1 target_hit=-
+ctl-groupby            stale=False flags=0 target_hit=-
+ctl-requests           stale=False flags=0 target_hit=-
+{
+  "model": "qwen3.8-27b",
+  "recorded_at": "2026-10-27T10:12:37.217243+08:00",
+  "answers": 32,
+  "changed_cases": 28,
+  "stale_answers": 9,
+  "stale_rate": 0.321,
+  "guard_caught_stale": 4,
+  "flags_total": 27,
+  "flags_on_controls": 1,
+  "symbols_checked": 136
+}
+人工复核：data/review_qwen3.8-27b.csv（human_label 填 对/错）

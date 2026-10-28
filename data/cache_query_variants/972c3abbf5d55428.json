@@ -1,0 +1,21 @@
+{
+  "id": "972c3abbf5d55428",
+  "label": "pandas groupby axis argument removed",
+  "request": {
+    "Query": "pandas groupby axis argument removed",
+    "Mode": 0,
+    "Cnt": 10,
+    "Site": "pandas.pydata.org",
+    "Freshness": "y1"
+  },
+  "status": 200,
+  "elapsed_ms": 1342,
+  "recorded_at": "2026-10-28T15:29:42.278428+08:00",
+  "response": {
+    "Response": {
+      "RequestId": "7b842c9c-6861-4798-8e60-032a8fcb967f",
+      "Query": "pandas groupby axis argument removed",
+      "Version": "standard"
+    }
+  }
+}

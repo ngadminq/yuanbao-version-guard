@@ -1,0 +1,1315 @@
+{
+  "trials": [
+    {
+      "case": "py-telnetlib",
+      "condition": "A_reminder",
+      "repeat": 0,
+      "elapsed_ms": 7838,
+      "usage": {
+        "prompt_tokens": 341,
+        "total_tokens": 2123,
+        "completion_tokens": 1782,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:39:29.024517+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport socket\nimport re\nimport time\n\nHOST = \"192.168.1.1\"\nPORT = 23\nUSERNAME = \"admin\"\nPASSWORD = \"admin\"\nCOMMAND = \"display version\"\nTIMEOUT = 15\n\n\ndef _read_until(sock, patterns, timeout=TIMEOUT):\n    \"\"\"Read from sock until any regex in *patterns* matches the accumulated buffer.\"\"\"\n    sock.settimeout(timeout)\n    buf = b\"\"\n    deadline = time.monotonic() + timeout\n    while True:\n        if time.monotonic() > deadline:\n            raise TimeoutError(f\"Timed out waiting for {patterns!r}\")\n        try:\n            chunk = sock.recv(4096)\n        except socket.timeout:\n            raise TimeoutError(f\"Timed out waiting for {patterns!r}\")\n        if not chunk:\n            break\n        buf += chunk\n        for p in patterns:\n            if re.search(p, buf, re.IGNORECASE):\n                return buf\n    return buf\n\n\ndef _flush(sock, wait=2.0):\n    \"\"\"Drain whatever is currently available (command output).\"\"\"\n    sock.settimeout(wait)\n    data = b\"\"\n    try:\n        while True:\n            chunk = sock.recv(4096)\n            if not chunk:\n                break\n            data += chunk\n    except socket.timeout:\n        pass\n    return data\n\n\nsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\nsock.settimeout(TIMEOUT)\nsock.connect((HOST, PORT))\n\ntry:\n    # ---- 登录 ----\n    _read_until(sock, [br\"login:\", br\"Username:\"])\n    sock.sendall(USERNAME.encode() + b\"\\n\")\n\n    _read_until(sock, [br\"Password:\", br\"password:\"])\n    sock.sendall(PASSWORD.encode() + b\"\\n\")\n\n    _read_until(sock, [br\"[#>]\"])\n\n    # ---- 发送命令并读取输出 ----\n    sock.sendall(COMMAND.encode() + b\"\\n\")\n    output = _flush(sock)\n    print(output.decode(\"utf-8\", errors=\"replace\"))\n\n    # ---- 确认回到提示符 ----\n    sock.sendall(b\"\\n\")\n    _read_until(sock, [br\"[#>]\"])\n\nfinally:\n    sock.close()\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "py-telnetlib",
+      "condition": "A_reminder",
+      "repeat": 1,
+      "elapsed_ms": 11134,
+      "usage": {
+        "prompt_tokens": 341,
+        "total_tokens": 2892,
+        "completion_tokens": 2551,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:39:40.162152+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport socket\nimport re\nimport time\n\nHOST = \"192.168.1.1\"\nPORT = 23\nUSERNAME = \"admin\"\nPASSWORD = \"admin\"\nCOMMAND = \"display version\"\nTIMEOUT = 15\n\n\ndef _recv_until(sock, patterns, timeout=TIMEOUT):\n    \"\"\"Read from socket until any regex pattern matches the accumulated buffer.\"\"\"\n    buf = b\"\"\n    deadline = time.monotonic() + timeout\n    while True:\n        remaining = deadline - time.monotonic()\n        if remaining <= 0:\n            break\n        sock.settimeout(remaining)\n        try:\n            chunk = sock.recv(4096)\n            if not chunk:\n                break\n            buf += chunk\n            if any(re.search(p, buf) for p in patterns):\n                break\n        except socket.timeout:\n            break\n    return buf\n\n\ndef _send(sock, data):\n    sock.sendall(data if isinstance(data, bytes) else data.encode(\"ascii\"))\n\n\n# 连接（telnetlib 在 Python 3.13 中已移除，改用 socket）\nsock = socket.create_connection((HOST, PORT), timeout=TIMEOUT)\n\n# 登录\n_recv_until(sock, [br\"login:\"])\n_send(sock, USERNAME + \"\\n\")\n_recv_until(sock, [br\"Password:\"])\n_send(sock, PASSWORD + \"\\n\")\n_recv_until(sock, [br\"[#>]\"])\n\n# 发送命令\n_send(sock, COMMAND + \"\\n\")\ntime.sleep(2)\n\n# 读取输出\noutput = _recv_until(sock, [br\"[#>]\"])\nprint(output.decode(\"utf-8\", errors=\"replace\"))\n\n# 再发一条空行确认回到提示符\n_send(sock, \"\\n\")\n_recv_until(sock, [br\"[#>]\"])\nsock.close()\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "py-telnetlib",
+      "condition": "A_reminder",
+      "repeat": 2,
+      "elapsed_ms": 3011,
+      "usage": {
+        "prompt_tokens": 341,
+        "total_tokens": 1100,
+        "completion_tokens": 759,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:39:43.175040+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport telnetlib3\nimport time\n\nHOST = \"192.168.1.1\"\nPORT = 23\nUSERNAME = \"admin\"\nPASSWORD = \"admin\"\nCOMMAND = \"display version\"\nTIMEOUT = 15\n\ntn = telnetlib3.Telnet(HOST, PORT, timeout=TIMEOUT)\n\n# 登录\ntn.expect([b\"login:\"])\ntn.write(USERNAME.encode() + b\"\\n\")\ntn.expect([b\"Password:\"])\ntn.write(PASSWORD.encode() + b\"\\n\")\ntn.expect([b\"[#>]\"])\n\n# 发送命令\ntn.write(COMMAND.encode() + b\"\\n\")\ntime.sleep(2)\n\n# 读取输出\noutput = tn.read_very_eager().decode(\"utf-8\", errors=\"replace\")\nprint(output)\n\n# 再发一条命令确认回到提示符\ntn.write(b\"\\n\")\ntn.expect([b\"[#>]\"])\ntn.close()\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "py-telnetlib",
+      "condition": "B_yuanbao",
+      "repeat": 0,
+      "elapsed_ms": 2981,
+      "usage": {
+        "prompt_tokens": 939,
+        "total_tokens": 1727,
+        "completion_tokens": 788,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:39:46.157730+08:00",
+      "evidence_source": {
+        "query": "python telnetlib removed 3.13",
+        "request_id": "f1948acd-21e6-41a4-8d8d-6d44f8c4ca98",
+        "urls": [
+          "https://docs.python.org/zh-tw/3.13/library/telnetlib.html",
+          "https://docs.python.org/3.12/library/telnetlib.html",
+          "https://docs.python.org/sv/3.13/library/telnetlib.html"
+        ]
+      },
+      "text": "\n\n```python\nimport telnetlib3\nimport time\n\nHOST = \"192.168.1.1\"\nPORT = 23\nUSERNAME = \"admin\"\nPASSWORD = \"admin\"\nCOMMAND = \"display version\"\nTIMEOUT = 15\n\ntn = telnetlib3.Telnet(HOST, PORT, timeout=TIMEOUT)\n\n# 登录\ntn.expect([b\"login:\"])\ntn.write(USERNAME.encode() + b\"\\n\")\ntn.expect([b\"Password:\"])\ntn.write(PASSWORD.encode() + b\"\\n\")\ntn.expect([b\"[#>]\"])\n\n# 发送命令\ntn.write(COMMAND.encode() + b\"\\n\")\ntime.sleep(2)\n\n# 读取输出\noutput = tn.read_very_eager().decode(\"utf-8\", errors=\"replace\")\nprint(output)\n\n# 再发一条命令确认回到提示符\ntn.write(b\"\\n\")\ntn.expect([b\"[#>]\"])\ntn.close()\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "py-telnetlib",
+      "condition": "B_yuanbao",
+      "repeat": 1,
+      "elapsed_ms": 5560,
+      "usage": {
+        "prompt_tokens": 939,
+        "total_tokens": 2411,
+        "completion_tokens": 1472,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:39:51.719824+08:00",
+      "evidence_source": {
+        "query": "python telnetlib removed 3.13",
+        "request_id": "f1948acd-21e6-41a4-8d8d-6d44f8c4ca98",
+        "urls": [
+          "https://docs.python.org/zh-tw/3.13/library/telnetlib.html",
+          "https://docs.python.org/3.12/library/telnetlib.html",
+          "https://docs.python.org/sv/3.13/library/telnetlib.html"
+        ]
+      },
+      "text": "\n\n```python\nimport asyncio\nimport telnetlib3\n\nHOST = \"192.168.1.1\"\nPORT = 23\nUSERNAME = \"admin\"\nPASSWORD = \"admin\"\nCOMMAND = \"display version\"\nTIMEOUT = 15\n\n\nasync def main():\n    async with telnetlib3.Telnet.connect(HOST, PORT, timeout=TIMEOUT) as tn:\n        # 登录\n        await tn.read_until(b\"login:\", timeout=TIMEOUT)\n        await tn.write(USERNAME.encode() + b\"\\n\")\n        await tn.read_until(b\"Password:\", timeout=TIMEOUT)\n        await tn.write(PASSWORD.encode() + b\"\\n\")\n        await tn.read_until(b\"[#>]\", timeout=TIMEOUT)\n\n        # 发送命令\n        await tn.write(COMMAND.encode() + b\"\\n\")\n        await asyncio.sleep(2)\n\n        # 读取输出\n        output = await tn.read_eager()\n        print(output.decode(\"utf-8\", errors=\"replace\"))\n\n        # 再发一条命令确认回到提示符\n        await tn.write(b\"\\n\")\n        await tn.read_until(b\"[#>]\", timeout=TIMEOUT)\n\n\nasyncio.run(main())\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "py-telnetlib",
+      "condition": "B_yuanbao",
+      "repeat": 2,
+      "elapsed_ms": 1961,
+      "usage": {
+        "prompt_tokens": 939,
+        "total_tokens": 1432,
+        "completion_tokens": 493,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:39:53.680960+08:00",
+      "evidence_source": {
+        "query": "python telnetlib removed 3.13",
+        "request_id": "f1948acd-21e6-41a4-8d8d-6d44f8c4ca98",
+        "urls": [
+          "https://docs.python.org/zh-tw/3.13/library/telnetlib.html",
+          "https://docs.python.org/3.12/library/telnetlib.html",
+          "https://docs.python.org/sv/3.13/library/telnetlib.html"
+        ]
+      },
+      "text": "\n\n```python\nfrom telnetlib3 import Telnet\nimport time\n\nHOST = \"192.168.1.1\"\nPORT = 23\nUSERNAME = \"admin\"\nPASSWORD = \"admin\"\nCOMMAND = \"display version\"\nTIMEOUT = 15\n\ntn = Telnet(HOST, PORT, timeout=TIMEOUT)\n\n# 登录\ntn.expect([b\"login:\"])\ntn.write(USERNAME.encode() + b\"\\n\")\ntn.expect([b\"Password:\"])\ntn.write(PASSWORD.encode() + b\"\\n\")\ntn.expect([b\"[#>]\"])\n\n# 发送命令\ntn.write(COMMAND.encode() + b\"\\n\")\ntime.sleep(2)\n\n# 读取输出\noutput = tn.read_very_eager().decode(\"utf-8\", errors=\"replace\")\nprint(output)\n\n# 再发一条命令确认回到提示符\ntn.write(b\"\\n\")\ntn.expect([b\"[#>]\"])\ntn.close()\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": "改用 from telnetlib3 import Telnet；telnetlib3 是否提供同步 Telnet 类未执行验证"
+    },
+    {
+      "case": "py-loop-policy",
+      "condition": "A_reminder",
+      "repeat": 0,
+      "elapsed_ms": 2264,
+      "usage": {
+        "prompt_tokens": 205,
+        "total_tokens": 757,
+        "completion_tokens": 552,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:39:55.949187+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport asyncio\nimport sys\n\nif sys.platform == \"win32\":\n    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())\n\nasync def main():\n    # 你的异步逻辑\n    await asyncio.sleep(1)\n    print(\"done\")\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n```",
+      "parses": true,
+      "still_stale": true,
+      "new_stale": [],
+      "fixed": false,
+      "manual_note": ""
+    },
+    {
+      "case": "py-loop-policy",
+      "condition": "A_reminder",
+      "repeat": 1,
+      "elapsed_ms": 2107,
+      "usage": {
+        "prompt_tokens": 205,
+        "total_tokens": 724,
+        "completion_tokens": 519,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:39:58.058145+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport asyncio\nimport sys\n\nif sys.platform == \"win32\":\n    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())\n\nasync def main():\n    # 你的异步逻辑\n    await asyncio.sleep(1)\n    print(\"done\")\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n```",
+      "parses": true,
+      "still_stale": true,
+      "new_stale": [],
+      "fixed": false,
+      "manual_note": ""
+    },
+    {
+      "case": "py-loop-policy",
+      "condition": "A_reminder",
+      "repeat": 2,
+      "elapsed_ms": 1547,
+      "usage": {
+        "prompt_tokens": 205,
+        "total_tokens": 541,
+        "completion_tokens": 336,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:39:59.607153+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport asyncio\nimport sys\n\nif sys.platform == \"win32\":\n    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())\n\nasync def main():\n    # 你的异步逻辑\n    await asyncio.sleep(1)\n    print(\"done\")\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n```",
+      "parses": true,
+      "still_stale": true,
+      "new_stale": [],
+      "fixed": false,
+      "manual_note": ""
+    },
+    {
+      "case": "py-loop-policy",
+      "condition": "B_yuanbao",
+      "repeat": 0,
+      "elapsed_ms": 4764,
+      "usage": {
+        "prompt_tokens": 1214,
+        "total_tokens": 2138,
+        "completion_tokens": 924,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:04.372215+08:00",
+      "evidence_source": {
+        "query": "python asyncio set_event_loop_policy deprecated",
+        "request_id": "80b67be3-e1bd-4ea8-924b-9b3583a780de",
+        "urls": [
+          "https://docs.python.org/zh-cn/3.14/library/asyncio-policy.html",
+          "https://docs.python.org/zh-cn/3//library/asyncio-policy.html",
+          "https://docs.python.org/el/dev/whatsnew/3.15.html"
+        ]
+      },
+      "text": "\n\n```python\nimport asyncio\nimport sys\n\nasync def main():\n    await asyncio.sleep(1)\n    print(\"done\")\n\nif __name__ == \"__main__\":\n    if sys.platform == \"win32\":\n        asyncio.run(main(), loop_factory=lambda: asyncio.SelectorEventLoop())\n    else:\n        asyncio.run(main())\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "py-loop-policy",
+      "condition": "B_yuanbao",
+      "repeat": 1,
+      "elapsed_ms": 6974,
+      "usage": {
+        "prompt_tokens": 1214,
+        "total_tokens": 2574,
+        "completion_tokens": 1360,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:11.348379+08:00",
+      "evidence_source": {
+        "query": "python asyncio set_event_loop_policy deprecated",
+        "request_id": "80b67be3-e1bd-4ea8-924b-9b3583a780de",
+        "urls": [
+          "https://docs.python.org/zh-cn/3.14/library/asyncio-policy.html",
+          "https://docs.python.org/zh-cn/3//library/asyncio-policy.html",
+          "https://docs.python.org/el/dev/whatsnew/3.15.html"
+        ]
+      },
+      "text": "\n\n```python\nimport asyncio\nimport sys\n\nasync def main():\n    await asyncio.sleep(1)\n    print(\"done\")\n\nif __name__ == \"__main__\":\n    if sys.platform == \"win32\":\n        asyncio.run(main(), loop_factory=asyncio.SelectorEventLoop)\n    else:\n        asyncio.run(main())\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "py-loop-policy",
+      "condition": "B_yuanbao",
+      "repeat": 2,
+      "elapsed_ms": 5120,
+      "usage": {
+        "prompt_tokens": 1214,
+        "total_tokens": 2344,
+        "completion_tokens": 1130,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:16.469744+08:00",
+      "evidence_source": {
+        "query": "python asyncio set_event_loop_policy deprecated",
+        "request_id": "80b67be3-e1bd-4ea8-924b-9b3583a780de",
+        "urls": [
+          "https://docs.python.org/zh-cn/3.14/library/asyncio-policy.html",
+          "https://docs.python.org/zh-cn/3//library/asyncio-policy.html",
+          "https://docs.python.org/el/dev/whatsnew/3.15.html"
+        ]
+      },
+      "text": "\n\n```python\nimport asyncio\nimport sys\n\nasync def main():\n    # 你的异步逻辑\n    await asyncio.sleep(1)\n    print(\"done\")\n\nif __name__ == \"__main__\":\n    if sys.platform == \"win32\":\n        asyncio.Runner(loop_factory=lambda: asyncio.SelectorEventLoop()).run(main())\n    else:\n        asyncio.run(main())\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "py-sqlite-version",
+      "condition": "A_reminder",
+      "repeat": 0,
+      "elapsed_ms": 1457,
+      "usage": {
+        "prompt_tokens": 158,
+        "total_tokens": 419,
+        "completion_tokens": 261,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:17.929503+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport sqlite3\n\nprint(f\"sqlite3 module version: {sqlite3.version}\")\nprint(f\"SQLite library version: {sqlite3.sqlite_version}\")\n```",
+      "parses": true,
+      "still_stale": true,
+      "new_stale": [],
+      "fixed": false,
+      "manual_note": ""
+    },
+    {
+      "case": "py-sqlite-version",
+      "condition": "A_reminder",
+      "repeat": 1,
+      "elapsed_ms": 1143,
+      "usage": {
+        "prompt_tokens": 158,
+        "total_tokens": 350,
+        "completion_tokens": 192,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:19.073657+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport sqlite3\n\nprint(f\"sqlite3 module version: {sqlite3.version}\")\nprint(f\"SQLite library version: {sqlite3.sqlite_version}\")\n```",
+      "parses": true,
+      "still_stale": true,
+      "new_stale": [],
+      "fixed": false,
+      "manual_note": ""
+    },
+    {
+      "case": "py-sqlite-version",
+      "condition": "A_reminder",
+      "repeat": 2,
+      "elapsed_ms": 1452,
+      "usage": {
+        "prompt_tokens": 158,
+        "total_tokens": 354,
+        "completion_tokens": 196,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:20.526469+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport sqlite3\n\nprint(f\"sqlite3 module version: {sqlite3.version}\")\nprint(f\"SQLite library version: {sqlite3.sqlite_version}\")\n```",
+      "parses": true,
+      "still_stale": true,
+      "new_stale": [],
+      "fixed": false,
+      "manual_note": ""
+    },
+    {
+      "case": "py-sqlite-version",
+      "condition": "B_yuanbao",
+      "repeat": 0,
+      "elapsed_ms": 1614,
+      "usage": {
+        "prompt_tokens": 1105,
+        "total_tokens": 1453,
+        "completion_tokens": 348,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:22.142227+08:00",
+      "evidence_source": {
+        "query": "python 3.14 whatsnew sqlite3 version removed",
+        "request_id": "764b248c-e264-4435-a6af-0810e132b571",
+        "urls": [
+          "https://docs.python.org/zh-cn/3.12//library/sqlite3.html",
+          "https://docs.python.org/id/3.14/whatsnew/3.14.html",
+          "https://docs.python.org/zh-cn/3.12/library/sqlite3.html"
+        ]
+      },
+      "text": "\n\n```python\nimport sys\nimport sqlite3\n\nprint(f\"Python version: {sys.version}\")\nprint(f\"SQLite library version: {sqlite3.sqlite_version}\")\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "py-sqlite-version",
+      "condition": "B_yuanbao",
+      "repeat": 1,
+      "elapsed_ms": 2702,
+      "usage": {
+        "prompt_tokens": 1105,
+        "total_tokens": 1566,
+        "completion_tokens": 461,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:24.845034+08:00",
+      "evidence_source": {
+        "query": "python 3.14 whatsnew sqlite3 version removed",
+        "request_id": "764b248c-e264-4435-a6af-0810e132b571",
+        "urls": [
+          "https://docs.python.org/zh-cn/3.12//library/sqlite3.html",
+          "https://docs.python.org/id/3.14/whatsnew/3.14.html",
+          "https://docs.python.org/zh-cn/3.12/library/sqlite3.html"
+        ]
+      },
+      "text": "\n\n```python\nimport sys\nimport sqlite3\n\nprint(f\"Python (sqlite3 module) version: {sys.version}\")\nprint(f\"SQLite library version: {sqlite3.sqlite_version}\")\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "py-sqlite-version",
+      "condition": "B_yuanbao",
+      "repeat": 2,
+      "elapsed_ms": 4078,
+      "usage": {
+        "prompt_tokens": 1105,
+        "total_tokens": 1836,
+        "completion_tokens": 731,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:28.924527+08:00",
+      "evidence_source": {
+        "query": "python 3.14 whatsnew sqlite3 version removed",
+        "request_id": "764b248c-e264-4435-a6af-0810e132b571",
+        "urls": [
+          "https://docs.python.org/zh-cn/3.12//library/sqlite3.html",
+          "https://docs.python.org/id/3.14/whatsnew/3.14.html",
+          "https://docs.python.org/zh-cn/3.12/library/sqlite3.html"
+        ]
+      },
+      "text": "\n\n```python\nimport sqlite3\nimport sys\n\nprint(f\"sqlite3 module version: {sys.version}\")\nprint(f\"SQLite library version: {sqlite3.sqlite_version}\")\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-applymap",
+      "condition": "A_reminder",
+      "repeat": 0,
+      "elapsed_ms": 871,
+      "usage": {
+        "prompt_tokens": 199,
+        "total_tokens": 368,
+        "completion_tokens": 169,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:29.799174+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2, 3], \"B\": [4, 5, 6]})\n\nresult = df.map(lambda x: x * 2)\n\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-applymap",
+      "condition": "A_reminder",
+      "repeat": 1,
+      "elapsed_ms": 1940,
+      "usage": {
+        "prompt_tokens": 199,
+        "total_tokens": 515,
+        "completion_tokens": 316,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:31.740883+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2, 3], \"B\": [4, 5, 6]})\n\nresult = df.map(lambda x: x * 2)\n\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-applymap",
+      "condition": "A_reminder",
+      "repeat": 2,
+      "elapsed_ms": 1221,
+      "usage": {
+        "prompt_tokens": 199,
+        "total_tokens": 441,
+        "completion_tokens": 242,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:32.963174+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2, 3], \"B\": [4, 5, 6]})\n\nresult = df.map(lambda x: x * 2)\n\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-applymap",
+      "condition": "B_yuanbao",
+      "repeat": 0,
+      "elapsed_ms": 899,
+      "usage": {
+        "prompt_tokens": 972,
+        "total_tokens": 1155,
+        "completion_tokens": 183,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:33.864125+08:00",
+      "evidence_source": {
+        "query": "pandas DataFrame.applymap removed map",
+        "request_id": "04e22b5c-2b4b-4254-ba1e-b76e85ce0a33",
+        "urls": [
+          "https://pandas.pydata.org/pandas-docs/version/2.1/reference/api/pandas.DataFrame.applymap.html",
+          "https://pandas.pydata.org/pandas-docs/version/0.20/generated/pandas.DataFrame.applymap.html",
+          "https://pandas.pydata.org/pandas-docs/version/0.25.2/reference/api/pandas.DataFrame.applymap.html"
+        ]
+      },
+      "text": "\n\n```python\nimport pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2, 3], \"B\": [4, 5, 6]})\n\nresult = df.map(lambda x: x * 2)\n\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-applymap",
+      "condition": "B_yuanbao",
+      "repeat": 1,
+      "elapsed_ms": 910,
+      "usage": {
+        "prompt_tokens": 972,
+        "total_tokens": 1147,
+        "completion_tokens": 175,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:34.775509+08:00",
+      "evidence_source": {
+        "query": "pandas DataFrame.applymap removed map",
+        "request_id": "04e22b5c-2b4b-4254-ba1e-b76e85ce0a33",
+        "urls": [
+          "https://pandas.pydata.org/pandas-docs/version/2.1/reference/api/pandas.DataFrame.applymap.html",
+          "https://pandas.pydata.org/pandas-docs/version/0.20/generated/pandas.DataFrame.applymap.html",
+          "https://pandas.pydata.org/pandas-docs/version/0.25.2/reference/api/pandas.DataFrame.applymap.html"
+        ]
+      },
+      "text": "\n\n```python\nimport pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2, 3], \"B\": [4, 5, 6]})\n\nresult = df.map(lambda x: x * 2)\n\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-applymap",
+      "condition": "B_yuanbao",
+      "repeat": 2,
+      "elapsed_ms": 830,
+      "usage": {
+        "prompt_tokens": 972,
+        "total_tokens": 1136,
+        "completion_tokens": 164,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:35.608366+08:00",
+      "evidence_source": {
+        "query": "pandas DataFrame.applymap removed map",
+        "request_id": "04e22b5c-2b4b-4254-ba1e-b76e85ce0a33",
+        "urls": [
+          "https://pandas.pydata.org/pandas-docs/version/2.1/reference/api/pandas.DataFrame.applymap.html",
+          "https://pandas.pydata.org/pandas-docs/version/0.20/generated/pandas.DataFrame.applymap.html",
+          "https://pandas.pydata.org/pandas-docs/version/0.25.2/reference/api/pandas.DataFrame.applymap.html"
+        ]
+      },
+      "text": "\n\n```python\nimport pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2, 3], \"B\": [4, 5, 6]})\n\nresult = df.map(lambda x: x * 2)\n\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-fillna-method",
+      "condition": "A_reminder",
+      "repeat": 0,
+      "elapsed_ms": 920,
+      "usage": {
+        "prompt_tokens": 134,
+        "total_tokens": 324,
+        "completion_tokens": 190,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:36.530563+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\ndf = df.ffill()\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-fillna-method",
+      "condition": "A_reminder",
+      "repeat": 1,
+      "elapsed_ms": 551,
+      "usage": {
+        "prompt_tokens": 134,
+        "total_tokens": 247,
+        "completion_tokens": 113,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:37.084421+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\ndf = df.ffill()\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-fillna-method",
+      "condition": "A_reminder",
+      "repeat": 2,
+      "elapsed_ms": 676,
+      "usage": {
+        "prompt_tokens": 134,
+        "total_tokens": 274,
+        "completion_tokens": 140,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:37.761430+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\ndf = df.ffill()\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-fillna-method",
+      "condition": "B_yuanbao",
+      "repeat": 0,
+      "elapsed_ms": 795,
+      "usage": {
+        "prompt_tokens": 865,
+        "total_tokens": 1037,
+        "completion_tokens": 172,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:38.558522+08:00",
+      "evidence_source": {
+        "query": "pandas 3.0 fillna method 参数 移除",
+        "request_id": "292fd3d4-5434-4c91-b9bd-26ed0e7161e7",
+        "urls": [
+          "https://pandas.pydata.org/pandas-docs/version/2.2/reference/api/pandas.DataFrame.fillna.html",
+          "https://pandas.pydata.org/pandas-docs/version/1.5/reference/api/pandas.DataFrame.fillna.html",
+          "https://pandas.pydata.org/pandas-docs/version/2.1/reference/api/pandas.DataFrame.fillna.html"
+        ]
+      },
+      "text": "\n\n```python\ndf = df.ffill()\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-fillna-method",
+      "condition": "B_yuanbao",
+      "repeat": 1,
+      "elapsed_ms": 730,
+      "usage": {
+        "prompt_tokens": 865,
+        "total_tokens": 1016,
+        "completion_tokens": 151,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:39.291145+08:00",
+      "evidence_source": {
+        "query": "pandas 3.0 fillna method 参数 移除",
+        "request_id": "292fd3d4-5434-4c91-b9bd-26ed0e7161e7",
+        "urls": [
+          "https://pandas.pydata.org/pandas-docs/version/2.2/reference/api/pandas.DataFrame.fillna.html",
+          "https://pandas.pydata.org/pandas-docs/version/1.5/reference/api/pandas.DataFrame.fillna.html",
+          "https://pandas.pydata.org/pandas-docs/version/2.1/reference/api/pandas.DataFrame.fillna.html"
+        ]
+      },
+      "text": "\n\n```python\ndf = df.ffill()\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-fillna-method",
+      "condition": "B_yuanbao",
+      "repeat": 2,
+      "elapsed_ms": 896,
+      "usage": {
+        "prompt_tokens": 865,
+        "total_tokens": 1058,
+        "completion_tokens": 193,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:40.188712+08:00",
+      "evidence_source": {
+        "query": "pandas 3.0 fillna method 参数 移除",
+        "request_id": "292fd3d4-5434-4c91-b9bd-26ed0e7161e7",
+        "urls": [
+          "https://pandas.pydata.org/pandas-docs/version/2.2/reference/api/pandas.DataFrame.fillna.html",
+          "https://pandas.pydata.org/pandas-docs/version/1.5/reference/api/pandas.DataFrame.fillna.html",
+          "https://pandas.pydata.org/pandas-docs/version/2.1/reference/api/pandas.DataFrame.fillna.html"
+        ]
+      },
+      "text": "\n\n```python\ndf = df.ffill()\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-freq-h",
+      "condition": "A_reminder",
+      "repeat": 0,
+      "elapsed_ms": 878,
+      "usage": {
+        "prompt_tokens": 185,
+        "total_tokens": 378,
+        "completion_tokens": 193,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:41.067920+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport pandas as pd\n\nidx = pd.date_range(start=\"2026-01-01 00:00:00\", periods=24, freq=\"h\")\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-freq-h",
+      "condition": "A_reminder",
+      "repeat": 1,
+      "elapsed_ms": 1572,
+      "usage": {
+        "prompt_tokens": 185,
+        "total_tokens": 559,
+        "completion_tokens": 374,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:42.641640+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport pandas as pd\n\nidx = pd.date_range(start=\"2026-01-01 00:00:00\", periods=24, freq=\"h\")\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-freq-h",
+      "condition": "A_reminder",
+      "repeat": 2,
+      "elapsed_ms": 1315,
+      "usage": {
+        "prompt_tokens": 185,
+        "total_tokens": 476,
+        "completion_tokens": 291,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:43.957642+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport pandas as pd\n\nidx = pd.date_range(start=\"2026-01-01 00:00:00\", periods=24, freq=\"h\")\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-freq-h",
+      "condition": "B_yuanbao",
+      "repeat": 0,
+      "elapsed_ms": 1175,
+      "usage": {
+        "prompt_tokens": 962,
+        "total_tokens": 1218,
+        "completion_tokens": 256,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:45.135087+08:00",
+      "evidence_source": {
+        "query": "pandas frequency alias H deprecated h",
+        "request_id": "66bd3c61-b796-485e-b89d-9a214446772f",
+        "urls": [
+          "https://pandas.pydata.org/docs/dev/reference/api/pandas.tseries.offsets.Milli.name.html",
+          "https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.tseries.offsets.SemiMonthEnd.name.html",
+          "https://pandas.pydata.org/docs/dev/reference/api/pandas.tseries.offsets.SemiMonthBegin.name.html"
+        ]
+      },
+      "text": "\n\n```python\nimport pandas as pd\n\nidx = pd.date_range(start=\"2026-01-01 00:00:00\", periods=24, freq=\"h\")\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-freq-h",
+      "condition": "B_yuanbao",
+      "repeat": 1,
+      "elapsed_ms": 1644,
+      "usage": {
+        "prompt_tokens": 962,
+        "total_tokens": 1352,
+        "completion_tokens": 390,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:46.780272+08:00",
+      "evidence_source": {
+        "query": "pandas frequency alias H deprecated h",
+        "request_id": "66bd3c61-b796-485e-b89d-9a214446772f",
+        "urls": [
+          "https://pandas.pydata.org/docs/dev/reference/api/pandas.tseries.offsets.Milli.name.html",
+          "https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.tseries.offsets.SemiMonthEnd.name.html",
+          "https://pandas.pydata.org/docs/dev/reference/api/pandas.tseries.offsets.SemiMonthBegin.name.html"
+        ]
+      },
+      "text": "\n\n```python\nimport pandas as pd\n\nidx = pd.date_range(start=\"2026-01-01 00:00:00\", periods=24, freq=\"h\")\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-freq-h",
+      "condition": "B_yuanbao",
+      "repeat": 2,
+      "elapsed_ms": 1511,
+      "usage": {
+        "prompt_tokens": 962,
+        "total_tokens": 1324,
+        "completion_tokens": 362,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:48.293742+08:00",
+      "evidence_source": {
+        "query": "pandas frequency alias H deprecated h",
+        "request_id": "66bd3c61-b796-485e-b89d-9a214446772f",
+        "urls": [
+          "https://pandas.pydata.org/docs/dev/reference/api/pandas.tseries.offsets.Milli.name.html",
+          "https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.tseries.offsets.SemiMonthEnd.name.html",
+          "https://pandas.pydata.org/docs/dev/reference/api/pandas.tseries.offsets.SemiMonthBegin.name.html"
+        ]
+      },
+      "text": "\n\n```python\nimport pandas as pd\n\nidx = pd.date_range(start=\"2026-01-01 00:00:00\", periods=24, freq=\"h\")\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-groupby-axis",
+      "condition": "A_reminder",
+      "repeat": 0,
+      "elapsed_ms": 3623,
+      "usage": {
+        "prompt_tokens": 177,
+        "total_tokens": 1008,
+        "completion_tokens": 831,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:51.919216+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport pandas as pd\n\n# df 为你的 DataFrame\nprefixes = [c.split(\"_\")[0] for c in df.columns]\ndf_result = df.T.groupby(prefixes).sum().T\nprint(df_result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-groupby-axis",
+      "condition": "A_reminder",
+      "repeat": 1,
+      "elapsed_ms": 6643,
+      "usage": {
+        "prompt_tokens": 177,
+        "total_tokens": 1534,
+        "completion_tokens": 1357,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:40:58.564812+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport pandas as pd\n\n# df 为你的 DataFrame\nprefix = pd.Series([c.split(\"_\")[0] for c in df.columns], index=df.columns)\ndf_result = df.T.groupby(prefix).sum().T\nprint(df_result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-groupby-axis",
+      "condition": "A_reminder",
+      "repeat": 2,
+      "elapsed_ms": 7696,
+      "usage": {
+        "prompt_tokens": 177,
+        "total_tokens": 1925,
+        "completion_tokens": 1748,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:06.262740+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport pandas as pd\n\n# df 为你的 DataFrame\ngroups = [c.split(\"_\")[0] for c in df.columns]\ndf_result = df.T.groupby(groups).sum().T\nprint(df_result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-groupby-axis",
+      "condition": "B_yuanbao",
+      "repeat": 0,
+      "elapsed_ms": 3954,
+      "usage": {
+        "prompt_tokens": 1035,
+        "total_tokens": 1924,
+        "completion_tokens": 889,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:10.219779+08:00",
+      "evidence_source": {
+        "query": "pandas 3.0 whatsnew groupby axis removed",
+        "request_id": "38d14a22-3caa-4063-9cac-c5f9697affc9",
+        "urls": [
+          "https://pandas.pydata.org/docs/dev/whatsnew/v3.0.0.html",
+          "https://pandas.pydata.org/docs/whatsnew/v3.1.0.html",
+          "https://pandas.pydata.org/docs/whatsnew/v3.0.0.html"
+        ]
+      },
+      "text": "\n\n```python\nimport pandas as pd\n\nprefixes = [c.split(\"_\")[0] for c in df.columns]\ndf_result = df.T.groupby(prefixes).sum().T\nprint(df_result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-groupby-axis",
+      "condition": "B_yuanbao",
+      "repeat": 1,
+      "elapsed_ms": 3442,
+      "usage": {
+        "prompt_tokens": 1035,
+        "total_tokens": 1792,
+        "completion_tokens": 757,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:13.663942+08:00",
+      "evidence_source": {
+        "query": "pandas 3.0 whatsnew groupby axis removed",
+        "request_id": "38d14a22-3caa-4063-9cac-c5f9697affc9",
+        "urls": [
+          "https://pandas.pydata.org/docs/dev/whatsnew/v3.0.0.html",
+          "https://pandas.pydata.org/docs/whatsnew/v3.1.0.html",
+          "https://pandas.pydata.org/docs/whatsnew/v3.0.0.html"
+        ]
+      },
+      "text": "\n\n```python\nimport pandas as pd\n\n# df 为你的 DataFrame\ngroups = [c.split(\"_\")[0] for c in df.columns]\ndf_result = df.T.groupby(groups).sum().T\nprint(df_result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "pd-groupby-axis",
+      "condition": "B_yuanbao",
+      "repeat": 2,
+      "elapsed_ms": 2840,
+      "usage": {
+        "prompt_tokens": 1035,
+        "total_tokens": 1698,
+        "completion_tokens": 663,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:16.507971+08:00",
+      "evidence_source": {
+        "query": "pandas 3.0 whatsnew groupby axis removed",
+        "request_id": "38d14a22-3caa-4063-9cac-c5f9697affc9",
+        "urls": [
+          "https://pandas.pydata.org/docs/dev/whatsnew/v3.0.0.html",
+          "https://pandas.pydata.org/docs/whatsnew/v3.1.0.html",
+          "https://pandas.pydata.org/docs/whatsnew/v3.0.0.html"
+        ]
+      },
+      "text": "\n\n```python\nimport pandas as pd\n\n# df 为你的 DataFrame\ndf_result = df.T.groupby([c.split(\"_\")[0] for c in df.columns]).sum().T\nprint(df_result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "np-trapz",
+      "condition": "A_reminder",
+      "repeat": 0,
+      "elapsed_ms": 1025,
+      "usage": {
+        "prompt_tokens": 175,
+        "total_tokens": 431,
+        "completion_tokens": 256,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:17.547459+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport numpy as np\n\nx = np.linspace(0, np.pi, 1000)\ny = np.sin(x)\nresult = np.trapezoid(y, x)\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "np-trapz",
+      "condition": "A_reminder",
+      "repeat": 1,
+      "elapsed_ms": 718,
+      "usage": {
+        "prompt_tokens": 175,
+        "total_tokens": 349,
+        "completion_tokens": 174,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:18.267075+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport numpy as np\n\nx = np.linspace(0, np.pi, 1000)\ny = np.sin(x)\nresult = np.trapezoid(y, x)\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "np-trapz",
+      "condition": "A_reminder",
+      "repeat": 2,
+      "elapsed_ms": 1330,
+      "usage": {
+        "prompt_tokens": 175,
+        "total_tokens": 499,
+        "completion_tokens": 324,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:19.598811+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nimport numpy as np\n\nx = np.linspace(0, np.pi, 1000)\ny = np.sin(x)\nresult = np.trapezoid(y, x)\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "np-trapz",
+      "condition": "B_yuanbao",
+      "repeat": 0,
+      "elapsed_ms": 653,
+      "usage": {
+        "prompt_tokens": 933,
+        "total_tokens": 1069,
+        "completion_tokens": 136,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:20.253224+08:00",
+      "evidence_source": {
+        "query": "numpy trapz deprecated trapezoid",
+        "request_id": "28d70dd2-f788-416d-bda5-e0f5839afa4e",
+        "urls": [
+          "https://numpy.org/devdocs/numpy_2_0_migration_guide.html?utm_source=jesper&utm_medium=email&utm_campaign=i-put-the-awe-in-awe-tism",
+          "https://numpy.org/doc/2.4/release/2.4.0-notes.html",
+          "https://numpy.org/doc/2.1/numpy_2_0_migration_guide.html"
+        ]
+      },
+      "text": "\n\n```python\nimport numpy as np\n\nx = np.linspace(0, np.pi, 1000)\ny = np.sin(x)\nresult = np.trapezoid(y, x)\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "np-trapz",
+      "condition": "B_yuanbao",
+      "repeat": 1,
+      "elapsed_ms": 505,
+      "usage": {
+        "prompt_tokens": 933,
+        "total_tokens": 1037,
+        "completion_tokens": 104,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:20.760041+08:00",
+      "evidence_source": {
+        "query": "numpy trapz deprecated trapezoid",
+        "request_id": "28d70dd2-f788-416d-bda5-e0f5839afa4e",
+        "urls": [
+          "https://numpy.org/devdocs/numpy_2_0_migration_guide.html?utm_source=jesper&utm_medium=email&utm_campaign=i-put-the-awe-in-awe-tism",
+          "https://numpy.org/doc/2.4/release/2.4.0-notes.html",
+          "https://numpy.org/doc/2.1/numpy_2_0_migration_guide.html"
+        ]
+      },
+      "text": "\n\n```python\nimport numpy as np\n\nx = np.linspace(0, np.pi, 1000)\ny = np.sin(x)\nresult = np.trapezoid(y, x)\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "np-trapz",
+      "condition": "B_yuanbao",
+      "repeat": 2,
+      "elapsed_ms": 687,
+      "usage": {
+        "prompt_tokens": 933,
+        "total_tokens": 1076,
+        "completion_tokens": 143,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:21.448705+08:00",
+      "evidence_source": {
+        "query": "numpy trapz deprecated trapezoid",
+        "request_id": "28d70dd2-f788-416d-bda5-e0f5839afa4e",
+        "urls": [
+          "https://numpy.org/devdocs/numpy_2_0_migration_guide.html?utm_source=jesper&utm_medium=email&utm_campaign=i-put-the-awe-in-awe-tism",
+          "https://numpy.org/doc/2.4/release/2.4.0-notes.html",
+          "https://numpy.org/doc/2.1/numpy_2_0_migration_guide.html"
+        ]
+      },
+      "text": "\n\n```python\nimport numpy as np\n\nx = np.linspace(0, np.pi, 1000)\ny = np.sin(x)\nresult = np.trapezoid(y, x)\nprint(result)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "lc-react-agent",
+      "condition": "A_reminder",
+      "repeat": 0,
+      "elapsed_ms": 2786,
+      "usage": {
+        "prompt_tokens": 262,
+        "total_tokens": 938,
+        "completion_tokens": 676,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:24.238151+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nfrom langchain_openai import ChatOpenAI\nfrom langchain_core.tools import tool\nfrom langgraph.prebuilt import create_react_agent\n\n\n@tool\ndef multiply(a: float, b: float) -> float:\n    \"\"\"Multiply two numbers and return the result.\"\"\"\n    return a * b\n\n\nllm = ChatOpenAI(model=\"gpt-4o-mini\", temperature=0)\n\nagent = create_react_agent(llm, tools=[multiply])\n\nresult = agent.invoke({\"messages\": [(\"human\", \"What is 7 * 8?\")]})\nprint(result[\"messages\"][-1].content)\n```",
+      "parses": true,
+      "still_stale": true,
+      "new_stale": [],
+      "fixed": false,
+      "manual_note": ""
+    },
+    {
+      "case": "lc-react-agent",
+      "condition": "A_reminder",
+      "repeat": 1,
+      "elapsed_ms": 4819,
+      "usage": {
+        "prompt_tokens": 262,
+        "total_tokens": 1415,
+        "completion_tokens": 1153,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:29.058719+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nfrom langchain_openai import ChatOpenAI\nfrom langchain_core.tools import tool\nfrom langgraph.prebuilt import create_react_agent\n\n\n@tool\ndef multiply(a: float, b: float) -> float:\n    \"\"\"Multiply two numbers and return the result.\"\"\"\n    return a * b\n\n\nllm = ChatOpenAI(model=\"gpt-4o-mini\", temperature=0)\n\nagent = create_react_agent(llm, tools=[multiply])\n\nresult = agent.invoke({\"messages\": [(\"human\", \"What is 7 * 8?\")]})\nprint(result[\"messages\"][-1].content)\n```",
+      "parses": true,
+      "still_stale": true,
+      "new_stale": [],
+      "fixed": false,
+      "manual_note": ""
+    },
+    {
+      "case": "lc-react-agent",
+      "condition": "A_reminder",
+      "repeat": 2,
+      "elapsed_ms": 3369,
+      "usage": {
+        "prompt_tokens": 262,
+        "total_tokens": 1055,
+        "completion_tokens": 793,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:32.430783+08:00",
+      "evidence_source": null,
+      "text": "\n\n```python\nfrom langchain_openai import ChatOpenAI\nfrom langchain_core.tools import tool\nfrom langgraph.prebuilt import create_react_agent\n\n\n@tool\ndef multiply(a: float, b: float) -> float:\n    \"\"\"Multiply two numbers and return the result.\"\"\"\n    return a * b\n\n\nllm = ChatOpenAI(model=\"gpt-4o-mini\", temperature=0)\n\nagent = create_react_agent(llm, tools=[multiply])\n\nresult = agent.invoke({\"messages\": [(\"human\", \"What is 7 * 8?\")]})\nprint(result[\"messages\"][-1].content)\n```",
+      "parses": true,
+      "still_stale": true,
+      "new_stale": [],
+      "fixed": false,
+      "manual_note": ""
+    },
+    {
+      "case": "lc-react-agent",
+      "condition": "B_yuanbao",
+      "repeat": 0,
+      "elapsed_ms": 2116,
+      "usage": {
+        "prompt_tokens": 939,
+        "total_tokens": 1435,
+        "completion_tokens": 496,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:34.547794+08:00",
+      "evidence_source": {
+        "query": "langgraph create_react_agent deprecated create_agent",
+        "request_id": "89cff2ed-8e63-4a9a-9cee-964f2f76bdb9",
+        "urls": [
+          "https://docs.langchain.com/oss/javascript/migrate/langgraph-v1",
+          "https://docs.langchain.com/oss/python/migrate/langgraph-v1",
+          "https://docs.langchain.com/oss/python/releases/langchain-v1?ajs_uid=e4ce8b88-c947-4b00-a445-d0c3eb21f3be&ref=blog.langchain.com"
+        ]
+      },
+      "text": "\n\n```python\nfrom langchain_openai import ChatOpenAI\nfrom langchain_core.tools import tool\nfrom langchain.agents import create_agent\n\n\n@tool\ndef multiply(a: float, b: float) -> float:\n    \"\"\"Multiply two numbers and return the result.\"\"\"\n    return a * b\n\n\nllm = ChatOpenAI(model=\"gpt-4o-mini\", temperature=0)\n\nagent = create_agent(llm, tools=[multiply])\n\nresult = agent.invoke({\"messages\": [(\"human\", \"What is 7 * 8?\")]})\nprint(result[\"messages\"][-1].content)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "lc-react-agent",
+      "condition": "B_yuanbao",
+      "repeat": 1,
+      "elapsed_ms": 1502,
+      "usage": {
+        "prompt_tokens": 939,
+        "total_tokens": 1339,
+        "completion_tokens": 400,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:36.053808+08:00",
+      "evidence_source": {
+        "query": "langgraph create_react_agent deprecated create_agent",
+        "request_id": "89cff2ed-8e63-4a9a-9cee-964f2f76bdb9",
+        "urls": [
+          "https://docs.langchain.com/oss/javascript/migrate/langgraph-v1",
+          "https://docs.langchain.com/oss/python/migrate/langgraph-v1",
+          "https://docs.langchain.com/oss/python/releases/langchain-v1?ajs_uid=e4ce8b88-c947-4b00-a445-d0c3eb21f3be&ref=blog.langchain.com"
+        ]
+      },
+      "text": "\n\n```python\nfrom langchain_openai import ChatOpenAI\nfrom langchain_core.tools import tool\nfrom langchain.agents import create_agent\n\n\n@tool\ndef multiply(a: float, b: float) -> float:\n    \"\"\"Multiply two numbers and return the result.\"\"\"\n    return a * b\n\n\nllm = ChatOpenAI(model=\"gpt-4o-mini\", temperature=0)\n\nagent = create_agent(llm, tools=[multiply])\n\nresult = agent.invoke({\"messages\": [(\"human\", \"What is 7 * 8?\")]})\nprint(result[\"messages\"][-1].content)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    },
+    {
+      "case": "lc-react-agent",
+      "condition": "B_yuanbao",
+      "repeat": 2,
+      "elapsed_ms": 1425,
+      "usage": {
+        "prompt_tokens": 939,
+        "total_tokens": 1297,
+        "completion_tokens": 358,
+        "prompt_tokens_details": null
+      },
+      "asked_at": "2026-10-28T15:41:37.481494+08:00",
+      "evidence_source": {
+        "query": "langgraph create_react_agent deprecated create_agent",
+        "request_id": "89cff2ed-8e63-4a9a-9cee-964f2f76bdb9",
+        "urls": [
+          "https://docs.langchain.com/oss/javascript/migrate/langgraph-v1",
+          "https://docs.langchain.com/oss/python/migrate/langgraph-v1",
+          "https://docs.langchain.com/oss/python/releases/langchain-v1?ajs_uid=e4ce8b88-c947-4b00-a445-d0c3eb21f3be&ref=blog.langchain.com"
+        ]
+      },
+      "text": "\n\n```python\nfrom langchain_openai import ChatOpenAI\nfrom langchain_core.tools import tool\nfrom langchain.agents import create_agent\n\n\n@tool\ndef multiply(a: float, b: float) -> float:\n    \"\"\"Multiply two numbers and return the result.\"\"\"\n    return a * b\n\n\nllm = ChatOpenAI(model=\"gpt-4o-mini\", temperature=0)\n\nagent = create_agent(llm, tools=[multiply])\n\nresult = agent.invoke({\"messages\": [(\"human\", \"What is 7 * 8?\")]})\nprint(result[\"messages\"][-1].content)\n```",
+      "parses": true,
+      "still_stale": false,
+      "new_stale": [],
+      "fixed": true,
+      "manual_note": ""
+    }
+  ],
+  "summary": {
+    "A_reminder": {
+      "trials": 27,
+      "fixed": 18,
+      "still_stale": 9,
+      "new_stale": 0
+    },
+    "B_yuanbao": {
+      "trials": 27,
+      "fixed": 27,
+      "still_stale": 0,
+      "new_stale": 0
+    }
+  },
+  "scoring": "去掉注释后：旧 API 正则不再匹配、无其他用例的旧 API、可被 ast 解析 => fixed；人工逐条核对替代写法，见 manual_note"
+}

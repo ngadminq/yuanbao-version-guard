@@ -1,0 +1,24 @@
+{
+  "id": "209e1e3b0a18c569",
+  "label": "pandas fillna method keyword removed ffill",
+  "request": {
+    "Query": "pandas fillna method keyword removed ffill",
+    "Mode": 0,
+    "Cnt": 10,
+    "Site": "pandas.pydata.org",
+    "Freshness": "y1"
+  },
+  "status": 200,
+  "elapsed_ms": 1373,
+  "recorded_at": "2026-10-28T15:29:26.478031+08:00",
+  "response": {
+    "Response": {
+      "RequestId": "18e30c0d-f2e8-4744-b134-f0a32fe74f4b",
+      "Query": "pandas fillna method keyword removed ffill",
+      "Pages": [
+        "{\"passage\":\"pandas documentation pandas。pandas is an open source, BSD-licensed library providing high-performance, easy-to-use data structures and data analysis tools for the Python programming language. Getting started New to pandas? Check out the getting started guides. They contain an introduction to pandas’ main concepts and links to additional tutorials. To the getting started guides User guide The user guide provides in-depth information on the key concepts of pandas with useful background information and explanation. To the user guide API reference The reference guide contains a detailed description of the pandas API. The reference describes how the methods work and which parameters can be used. It assumes that you have an understanding of the key concepts. To the reference guide Developer guid...\",\"score\":0.305,\"date\":\"2026/09/17 00:00:00\",\"title\":\"pandas documentation\",\"url\":\"https://pandas.pydata.org/pandas-docs/version/3.0/index.html\",\"content\":\"pandas is an open source, BSD-licensed library providing high-performance, easy-to-use data structures and data analysis tools for the Python programming language. Getting started New to pandas? Check out the getting started guides. They contain an introduction to pandas’ main concepts and links to additional tutorials. To the getting started guides User guide The user guide provides in-depth information on the key concepts of pandas with useful background information and explanation. To the user guide API reference The reference guide contains a detailed description of the pandas API. The reference describes how the methods work and which parameters can be used...\",\"site\":\"pandas\",\"favicon\":\"https://cdn-yb.icon.qq.com/zuowei_dir/pandas_pydata_org.ico\",\"pics\":[]}"
+      ],
+      "Version": "standard"
+    }
+  }
+}

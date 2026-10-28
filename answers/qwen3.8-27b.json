@@ -1,0 +1,450 @@
+{
+  "py-utcnow": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:11.505532+08:00",
+    "elapsed_ms": 652,
+    "usage": {
+      "prompt_tokens": 66,
+      "total_tokens": 176,
+      "completion_tokens": 110,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nfrom datetime import datetime, timezone\n\nprint(datetime.now(timezone.utc).isoformat())\n```"
+  },
+  "py-distutils": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:12.439964+08:00",
+    "elapsed_ms": 432,
+    "usage": {
+      "prompt_tokens": 60,
+      "total_tokens": 126,
+      "completion_tokens": 66,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nfrom setuptools import setup\n\nsetup(\n    name=\"mymodule\",\n    version=\"0.1.0\",\n    py_modules=[\"mymodule\"],\n)\n```"
+  },
+  "py-imp": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:13.700214+08:00",
+    "elapsed_ms": 759,
+    "usage": {
+      "prompt_tokens": 59,
+      "total_tokens": 188,
+      "completion_tokens": 129,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport importlib\nimport mymodule  # 首次导入\n\n# 修改 mymodule.py 的内容后，重新加载\nimportlib.reload(mymodule)\n```"
+  },
+  "py-wrap-socket": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:15.659798+08:00",
+    "elapsed_ms": 1459,
+    "usage": {
+      "prompt_tokens": 76,
+      "total_tokens": 392,
+      "completion_tokens": 316,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport socket\nimport ssl\n\nhost = \"example.com\"\nport = 443\n\nraw_sock = socket.create_connection((host, port), timeout=10)\nctx = ssl.create_default_context()\ntls_sock = ctx.wrap_socket(raw_sock, server_hostname=host)\n\nrequest = (\n    f\"GET / HTTP/1.1\\r\\n\"\n    f\"Host: {host}\\r\\n\"\n    f\"Connection: close\\r\\n\"\n    f\"\\r\\n\"\n)\ntls_sock.sendall(request.encode())\n\nchunks = []\nwhile True:\n    data = tls_sock.recv(4096)\n    if not data:\n        break\n    chunks.append(data)\n\ntls_sock.close()\n\nresponse = b\"\".join(chunks).decode(errors=\"replace\")\nprint(response)\n```"
+  },
+  "py-safeconfigparser": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:16.547086+08:00",
+    "elapsed_ms": 386,
+    "usage": {
+      "prompt_tokens": 63,
+      "total_tokens": 119,
+      "completion_tokens": 56,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport configparser\n\nconfig = configparser.ConfigParser()\nconfig.read(\"config.ini\")\n\nhost = config[\"db\"][\"host\"]\n```"
+  },
+  "py-assertequals": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:17.745073+08:00",
+    "elapsed_ms": 696,
+    "usage": {
+      "prompt_tokens": 59,
+      "total_tokens": 221,
+      "completion_tokens": 162,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport unittest\n\n\ndef add(a, b):\n    return a + b\n\n\nclass TestAdd(unittest.TestCase):\n    def test_add_positive(self):\n        self.assertEqual(add(1, 2), 3)\n\n    def test_add_negative(self):\n        self.assertEqual(add(-1, -2), -3)\n\n    def test_add_mixed(self):\n        self.assertEqual(add(-1, 1), 0)\n\n    def test_add_float(self):\n        self.assertAlmostEqual(add(0.1, 0.2), 0.3)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n```"
+  },
+  "py-cgi": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:20.048582+08:00",
+    "elapsed_ms": 1801,
+    "usage": {
+      "prompt_tokens": 64,
+      "total_tokens": 448,
+      "completion_tokens": 384,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\n#!/usr/bin/env python3\nimport urllib.parse\nimport html\nimport sys\n\ndef get_query_string():\n    if sys.stdin and not sys.stdin.isatty():\n        length = int(sys.stdin.headers.get(\"Content-Length\", 0) if hasattr(sys.stdin, \"headers\") else sys.stdin.readline().strip() if False else 0)\n    # 读取 POST 数据\n    body = \"\"\n    try:\n        length = int(sys.stdin.readline().strip()) if False else int(__import__('os').environ.get(\"CONTENT_LENGTH\", 0))\n        if length > 0:\n            body = sys.stdin.read(length)\n    except Exception:\n        pass\n\n    # 读取 GET 数据\n    query = __import__('os').environ.get(\"QUERY_STRING\", \"\")\n\n    data = urllib.parse.parse_qs(query + \"&\" + body if query and body else (query or body))\n    return data\n\ndata = get_query_string()\nname = html.escape(data.get(\"name\", [\"\"])[0])\n\nsys.stdout.write(\"Content-Type: text/html; charset=utf-8\\r\\n\\r\\n\")\nsys.stdout.write(f\"<html><body><h1>Hello, {name}!</h1></body></html>\")\n```"
+  },
+  "py-telnetlib": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:22.174871+08:00",
+    "elapsed_ms": 1626,
+    "usage": {
+      "prompt_tokens": 65,
+      "total_tokens": 404,
+      "completion_tokens": 339,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport telnetlib\nimport time\n\nHOST = \"192.168.1.1\"\nPORT = 23\nUSERNAME = \"admin\"\nPASSWORD = \"admin\"\nCOMMAND = \"display version\"\nTIMEOUT = 15\n\ntn = telnetlib.Telnet(HOST, PORT, timeout=TIMEOUT)\n\n# 登录\ntn.expect([b\"login:\"])\ntn.write(USERNAME.encode() + b\"\\n\")\ntn.expect([b\"Password:\"])\ntn.write(PASSWORD.encode() + b\"\\n\")\ntn.expect([b\"[#>]\"])\n\n# 发送命令\ntn.write(COMMAND.encode() + b\"\\n\")\ntime.sleep(2)\n\n# 读取输出\noutput = tn.read_very_eager().decode(\"utf-8\", errors=\"replace\")\nprint(output)\n\n# 再发一条命令确认回到提示符\ntn.write(b\"\\n\")\ntn.expect([b\"[#>]\"])\ntn.close()\n```"
+  },
+  "py-pipes": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:24.057243+08:00",
+    "elapsed_ms": 1378,
+    "usage": {
+      "prompt_tokens": 66,
+      "total_tokens": 369,
+      "completion_tokens": 303,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport shlex\n\ndef build_command(program: str, *args: str) -> str:\n    \"\"\"安全拼接 shell 命令，对每个参数进行引号转义。\"\"\"\n    return \" \".join([program] + [shlex.quote(a) for a in args])\n\n# 示例\nfilename = \"file; rm -rf / #.txt\"\ncmd = build_command(\"cat\", filename)\nprint(cmd)  # cat 'file; rm -rf / #.txt'\n\n# 直接安全执行（推荐）\nimport subprocess\nsubprocess.run(cmd, shell=True, check=True)\n\n# 更推荐：用列表参数，无需手动拼接\nsubprocess.run([\"cat\", filename], check=True)\n```"
+  },
+  "py-imghdr": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:25.655759+08:00",
+    "elapsed_ms": 1098,
+    "usage": {
+      "prompt_tokens": 68,
+      "total_tokens": 321,
+      "completion_tokens": 253,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\ndef is_image(filepath: str) -> bool:\n    \"\"\"通过文件内容的魔数判断是否为 PNG 或 JPEG 图片\"\"\"\n    PNG_MAGIC = b'\\x89PNG\\r\\n\\x1a\\n'\n    JPEG_MAGIC = b'\\xff\\xd8\\xff'\n\n    with open(filepath, 'rb') as f:\n        header = f.read(8)\n\n    return header.startswith(PNG_MAGIC) or header.startswith(JPEG_MAGIC)\n\n\nif __name__ == '__main__':\n    import sys\n    path = sys.argv[1] if len(sys.argv) > 1 else 'test.png'\n    print(is_image(path))\n```"
+  },
+  "py-get-event-loop": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:26.876067+08:00",
+    "elapsed_ms": 719,
+    "usage": {
+      "prompt_tokens": 62,
+      "total_tokens": 216,
+      "completion_tokens": 154,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport asyncio\n\nasync def my_async():\n    await asyncio.sleep(1)\n    return 42\n\ndef sync_func():\n    return asyncio.run(my_async())\n\nprint(sync_func())  # 42\n```"
+  },
+  "py-ast-num": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:28.834600+08:00",
+    "elapsed_ms": 1456,
+    "usage": {
+      "prompt_tokens": 63,
+      "total_tokens": 372,
+      "completion_tokens": 309,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport ast\n\nsource = \"\"\"\na = 42\nb = 3.14\nc = 1 + 2j\nd = \"hello\"\ne = True\nf = 0xFF\ng = 1_000_000\nh = 2.5e-3\n\"\"\"\n\ntree = ast.parse(source)\n\nnumbers = []\nfor node in ast.walk(tree):\n    if isinstance(node, ast.Constant) and isinstance(node.value, (int, float, complex)) and not isinstance(node.value, bool):\n        numbers.append((node.lineno, node.col_offset, node.value, type(node.value).__name__))\n\nprint(f\"共找到 {len(numbers)} 个数字字面量:\")\nfor lineno, col, value, typ in numbers:\n    print(f\"  行{lineno:>2} 列{col:>3}  {value!r:>20}  ({typ})\")\n```"
+  },
+  "py-loop-policy": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:30.662753+08:00",
+    "elapsed_ms": 1326,
+    "usage": {
+      "prompt_tokens": 69,
+      "total_tokens": 339,
+      "completion_tokens": 270,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport asyncio\nimport sys\n\nif sys.platform == \"win32\":\n    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())\n\nasync def main():\n    # 你的异步逻辑\n    await asyncio.sleep(1)\n    print(\"done\")\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n```"
+  },
+  "py-sqlite-version": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:31.669738+08:00",
+    "elapsed_ms": 506,
+    "usage": {
+      "prompt_tokens": 63,
+      "total_tokens": 162,
+      "completion_tokens": 99,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport sqlite3\n\nprint(f\"sqlite3 module version: {sqlite3.version}\")\nprint(f\"SQLite library version: {sqlite3.sqlite_version}\")\n```"
+  },
+  "pd-append": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:33.045955+08:00",
+    "elapsed_ms": 875,
+    "usage": {
+      "prompt_tokens": 60,
+      "total_tokens": 217,
+      "completion_tokens": 157,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2], \"B\": [3, 4]})\n\ndf.loc[len(df)] = [5, 6]\n\nprint(df)\n```"
+  },
+  "pd-applymap": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:34.326574+08:00",
+    "elapsed_ms": 779,
+    "usage": {
+      "prompt_tokens": 61,
+      "total_tokens": 196,
+      "completion_tokens": 135,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2, 3], \"B\": [4, 5, 6]})\n\nresult = df.applymap(lambda x: x * 2)\n# pandas >= 2.1.0 可用 df.map(lambda x: x * 2)\n\nprint(result)\n```"
+  },
+  "pd-fillna-method": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:35.115908+08:00",
+    "elapsed_ms": 288,
+    "usage": {
+      "prompt_tokens": 60,
+      "total_tokens": 104,
+      "completion_tokens": 44,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\ndf = df.fillna(method='ffill')\n```"
+  },
+  "pd-delim-whitespace": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:36.364360+08:00",
+    "elapsed_ms": 746,
+    "usage": {
+      "prompt_tokens": 62,
+      "total_tokens": 229,
+      "completion_tokens": 167,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport pandas as pd\n\ndf = pd.read_csv('file.txt', sep=r'\\s+', engine='python')\n```"
+  },
+  "pd-freq-h": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:37.330475+08:00",
+    "elapsed_ms": 463,
+    "usage": {
+      "prompt_tokens": 80,
+      "total_tokens": 173,
+      "completion_tokens": 93,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport pandas as pd\n\nidx = pd.date_range(start=\"2026-01-01 00:00:00\", periods=24, freq=\"H\")\n```"
+  },
+  "pd-resample-m": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:38.474303+08:00",
+    "elapsed_ms": 642,
+    "usage": {
+      "prompt_tokens": 62,
+      "total_tokens": 205,
+      "completion_tokens": 143,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport pandas as pd\n\n# df: 包含 'date'（datetime64）和 'sales' 列的 DataFrame\ndf['date'] = pd.to_datetime(df['date'])\nmonthly_sales = df.set_index('date')['sales'].resample('ME').sum()\nprint(monthly_sales)\n```"
+  },
+  "pd-groupby-axis": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:40.884959+08:00",
+    "elapsed_ms": 1899,
+    "usage": {
+      "prompt_tokens": 73,
+      "total_tokens": 495,
+      "completion_tokens": 422,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport pandas as pd\n\n# df 为你的 DataFrame\ndf_result = df.groupby([c.split(\"_\")[0] for c in df.columns], axis=1).sum()\nprint(df_result)\n```"
+  },
+  "np-float_": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:41.759387+08:00",
+    "elapsed_ms": 373,
+    "usage": {
+      "prompt_tokens": 68,
+      "total_tokens": 141,
+      "completion_tokens": 73,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport numpy as np\n\na = np.array([1, 2, 3, 4, 5])\nb = a.astype(np.float64)\n```"
+  },
+  "np-nan": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:42.667002+08:00",
+    "elapsed_ms": 404,
+    "usage": {
+      "prompt_tokens": 59,
+      "total_tokens": 134,
+      "completion_tokens": 75,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport numpy as np\n\narr = np.array([1, 2, np.nan, 4, np.inf, 6, np.nan, 8])\nprint(arr)\n```"
+  },
+  "np-product": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:43.762810+08:00",
+    "elapsed_ms": 594,
+    "usage": {
+      "prompt_tokens": 60,
+      "total_tokens": 187,
+      "completion_tokens": 127,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport numpy as np\n\narr = np.array([1, 2, 3, 4, 5])\n\nproduct = np.prod(arr)\ncumulative_product = np.cumprod(arr)\n\nprint(\"数组:\", arr)\nprint(\"所有元素乘积:\", product)\nprint(\"累乘结果:\", cumulative_product)\n```"
+  },
+  "np-trapz": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:45.021194+08:00",
+    "elapsed_ms": 754,
+    "usage": {
+      "prompt_tokens": 68,
+      "total_tokens": 236,
+      "completion_tokens": 168,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport numpy as np\n\nx = np.linspace(0, np.pi, 1000)\ny = np.sin(x)\nresult = np.trapz(y, x)\nprint(result)\n```"
+  },
+  "np-in1d": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:46.072337+08:00",
+    "elapsed_ms": 549,
+    "usage": {
+      "prompt_tokens": 63,
+      "total_tokens": 171,
+      "completion_tokens": 108,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport numpy as np\n\na = np.array([1, 2, 3, 4, 5])\nb = np.array([2, 4, 6, 8])\n\nresult = np.isin(a, b)\nprint(result)  # [False  True False  True False]\n```"
+  },
+  "lc-react-agent": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:48.109443+08:00",
+    "elapsed_ms": 1535,
+    "usage": {
+      "prompt_tokens": 69,
+      "total_tokens": 443,
+      "completion_tokens": 374,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nfrom langchain_openai import ChatOpenAI\nfrom langchain_core.tools import tool\nfrom langgraph.prebuilt import create_react_agent\n\n\n@tool\ndef multiply(a: float, b: float) -> float:\n    \"\"\"Multiply two numbers and return the result.\"\"\"\n    return a * b\n\n\nllm = ChatOpenAI(model=\"gpt-4o-mini\", temperature=0)\n\nagent = create_react_agent(llm, tools=[multiply])\n\nresult = agent.invoke({\"messages\": [(\"human\", \"What is 7 * 8?\")]})\nprint(result[\"messages\"][-1].content)\n```"
+  },
+  "oa-assistants": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:52.301282+08:00",
+    "elapsed_ms": 3690,
+    "usage": {
+      "prompt_tokens": 71,
+      "total_tokens": 939,
+      "completion_tokens": 868,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nfrom openai import OpenAI\n\nclient = OpenAI()\n\n# ── 第一轮 ──\nr1 = client.responses.create(\n    model=\"gpt-4o\",\n    input=\"你好，我叫小明，我喜欢打篮球。\",\n)\nprint(\"第1轮  用户: 你好，我叫小明，我喜欢打篮球。\")\nprint(f\"第1轮  AI:   {r1.output_text}\")\nprint()\n\n# ── 第二轮（previous_response_id 让服务端自动携带上文）──\nr2 = client.responses.create(\n    model=\"gpt-4o\",\n    input=\"我叫什么名字？我喜欢什么运动？\",\n    previous_response_id=r1.id,\n)\nprint(\"第2轮  用户: 我叫什么名字？我喜欢什么运动？\")\nprint(f\"第2轮  AI:   {r2.output_text}\")\n```"
+  },
+  "ctl-json": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:53.171749+08:00",
+    "elapsed_ms": 368,
+    "usage": {
+      "prompt_tokens": 62,
+      "total_tokens": 134,
+      "completion_tokens": 72,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport json\n\nwith open(\"data.json\", \"r\", encoding=\"utf-8\") as f:\n    data = json.load(f)\n\nprint(data[\"user\"][\"name\"])\n```"
+  },
+  "ctl-pathlib": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:54.264200+08:00",
+    "elapsed_ms": 589,
+    "usage": {
+      "prompt_tokens": 61,
+      "total_tokens": 199,
+      "completion_tokens": 138,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport os\n\ndef list_py_files(directory):\n    results = []\n    for entry in os.listdir(directory):\n        full_path = os.path.join(directory, entry)\n        if os.path.isdir(full_path):\n            results.extend(list_py_files(full_path))\n        elif entry.endswith(\".py\"):\n            results.append(full_path)\n    return results\n\nif __name__ == \"__main__\":\n    for path in list_py_files(\".\"):\n        print(path)\n```"
+  },
+  "ctl-groupby": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:55.012922+08:00",
+    "elapsed_ms": 247,
+    "usage": {
+      "prompt_tokens": 63,
+      "total_tokens": 106,
+      "completion_tokens": 43,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\ndf.groupby('city')['price'].mean()\n```"
+  },
+  "ctl-requests": {
+    "model": "Qwen3.8-27B-FP8",
+    "endpoint_host": "redacted",
+    "reasoning_effort": "medium",
+    "asked_at": "2026-10-27T09:44:56.204064+08:00",
+    "elapsed_ms": 689,
+    "usage": {
+      "prompt_tokens": 69,
+      "total_tokens": 225,
+      "completion_tokens": 156,
+      "prompt_tokens_details": null
+    },
+    "text": "\n\n```python\nimport requests\n\ntry:\n    response = requests.post(\n        \"https://httpbin.org/post\",\n        json={\"key\": \"value\"},\n        timeout=5\n    )\n    response.raise_for_status()\n    print(response.json())\nexcept requests.exceptions.Timeout:\n    print(\"请求超时\")\nexcept requests.exceptions.HTTPError as e:\n    print(f\"HTTP 错误: {e}\")\nexcept requests.exceptions.ConnectionError:\n    print(\"连接失败\")\nexcept requests.exceptions.RequestException as e:\n    print(f\"请求异常: {e}\")\n```"
+  }
+}

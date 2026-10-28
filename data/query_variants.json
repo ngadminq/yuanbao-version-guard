@@ -1,0 +1,153 @@
+{
+  "py-sqlite-version": [
+    {
+      "query": "python 3.14 whatsnew sqlite3 version removed",
+      "freshness": null,
+      "request_id": "764b248c-e264-4435-a6af-0810e132b571",
+      "returned": 10,
+      "official": 10,
+      "verdict": "mentioned",
+      "evidence": {
+        "url": "https://docs.python.org/zh-cn/3.12/library/sqlite3.html",
+        "title": "sqlite3 --- SQLite 数据库的 DB-API 2.0 接口",
+        "date": "",
+        "version": "3.12",
+        "status": "mentioned",
+        "sentence": "sqlite3.version¶ 此模块 字符串 形式的版本号。"
+      }
+    },
+    {
+      "query": "Python 3.14 sqlite3 version 移除",
+      "freshness": null,
+      "request_id": "8a91c468-6f68-489f-97cc-93124bc8ce0a",
+      "returned": 10,
+      "official": 10,
+      "verdict": "no_evidence",
+      "evidence": null
+    },
+    {
+      "query": "python sqlite3 version version_info removed",
+      "freshness": "y1",
+      "request_id": "8ffb7f2e-ecfe-45ce-a910-71fbdcaa9059",
+      "returned": 3,
+      "official": 3,
+      "verdict": "no_evidence",
+      "evidence": null
+    }
+  ],
+  "pd-fillna-method": [
+    {
+      "query": "pandas 3.0 whatsnew fillna method keyword removed",
+      "freshness": null,
+      "request_id": "0f913a2b-ace7-474b-a18a-0bde73f2016b",
+      "returned": 10,
+      "official": 10,
+      "verdict": "deprecated",
+      "evidence": {
+        "url": "https://pandas.pydata.org/pandas-docs/version/3.1/whatsnew/v2.2.0.html",
+        "title": "What’s new in 2.2.0 (January 19, 2024)#",
+        "date": "",
+        "version": "3.1",
+        "status": "deprecated",
+        "sentence": "Copy to clipboard The same deprecation applies to inplace methods that are done in a chained manner, such as: df[\"foo\"].fillna(0, inplace=True) FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained as"
+      }
+    },
+    {
+      "query": "pandas 3.0 fillna method 参数 移除",
+      "freshness": null,
+      "request_id": "292fd3d4-5434-4c91-b9bd-26ed0e7161e7",
+      "returned": 10,
+      "official": 10,
+      "verdict": "deprecated",
+      "evidence": {
+        "url": "https://pandas.pydata.org/pandas-docs/version/3.1/whatsnew/v2.2.0.html",
+        "title": "What’s new in 2.2.0 (January 19, 2024)#",
+        "date": "",
+        "version": "3.1",
+        "status": "deprecated",
+        "sentence": "Copy to clipboard The same deprecation applies to inplace methods that are done in a chained manner, such as: df[\"foo\"].fillna(0, inplace=True) FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained as"
+      }
+    },
+    {
+      "query": "pandas fillna method keyword removed ffill",
+      "freshness": "y1",
+      "request_id": "18e30c0d-f2e8-4744-b134-f0a32fe74f4b",
+      "returned": 1,
+      "official": 1,
+      "verdict": "no_evidence",
+      "evidence": null
+    }
+  ],
+  "pd-freq-h": [
+    {
+      "query": "pandas 3.0 whatsnew enforced deprecation H frequency",
+      "freshness": null,
+      "request_id": "97e1654b-b714-46d3-83ed-18ae78f84eaa",
+      "returned": 10,
+      "official": 10,
+      "verdict": "no_evidence",
+      "evidence": null
+    },
+    {
+      "query": "pandas 3.0 频率别名 H 移除",
+      "freshness": null,
+      "request_id": "939027ef-29d3-47a1-af3c-9882517f7abb",
+      "returned": 10,
+      "official": 10,
+      "verdict": "no_evidence",
+      "evidence": null
+    },
+    {
+      "query": "pandas frequency alias H deprecated h",
+      "freshness": "y1",
+      "request_id": "4a8692ae-60e4-4e10-baad-67f25d3267d0",
+      "returned": 1,
+      "official": 1,
+      "verdict": "no_evidence",
+      "evidence": null
+    }
+  ],
+  "pd-groupby-axis": [
+    {
+      "query": "pandas 3.0 whatsnew groupby axis removed",
+      "freshness": null,
+      "request_id": "38d14a22-3caa-4063-9cac-c5f9697affc9",
+      "returned": 10,
+      "official": 10,
+      "verdict": "deprecated",
+      "evidence": {
+        "url": "https://pandas.pydata.org////docs/whatsnew/v2.1.0.html",
+        "title": "What’s new in 2.1.0 (Aug 30, 2023)#",
+        "date": "",
+        "version": null,
+        "status": "deprecated",
+        "sentence": "rolling(), DataFrame.expanding(), transpose before calling the method instead (GH 51778) Deprecated axis=1 in DataFrame.groupby() and in Grouper constructor, do frame.T.groupby(...) instead (GH 51203) Deprecated broa..."
+      }
+    },
+    {
+      "query": "pandas 3.0 groupby axis 参数 移除",
+      "freshness": null,
+      "request_id": "a1f6d37b-2ce6-4a5d-ae8a-7c1f2f260514",
+      "returned": 10,
+      "official": 10,
+      "verdict": "mentioned",
+      "evidence": {
+        "url": "https://pandas.pydata.org/pandas-docs/version/1.2.1/reference/api/pandas.DataFrame.groupby.html",
+        "title": "pandas.DataFrame.groupby¶",
+        "date": "2021/01/20 20:34:29",
+        "version": "1.2.1",
+        "status": "mentioned",
+        "sentence": "pandas.DataFrame.groupby¶ pandas。pandas.DataFrame.groupby¶ DataFrame.groupby(by=None, axis=0, level=None, as_index=True, sort=True, group"
+      }
+    },
+    {
+      "query": "pandas groupby axis argument removed",
+      "freshness": "y1",
+      "request_id": "7b842c9c-6861-4798-8e60-032a8fcb967f",
+      "returned": 0,
+      "official": 0,
+      "verdict": "no_evidence",
+      "evidence": null
+    }
+  ]
+}

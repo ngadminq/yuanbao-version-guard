@@ -1,0 +1,66 @@
+[
+  {
+    "chart": "A",
+    "file": "01-api-change-recency.png",
+    "sha256": "03f69547eff01417eefbc36e8b4b0e6c56f149b8dee54346f0a933adfc124aaf",
+    "source": "assets\\xiaohei-full-redraw\\PNG\\01-A-小黑手绘版.png",
+    "width": 1792,
+    "height": 1008
+  },
+  {
+    "chart": "B",
+    "file": "02-call-verification.png",
+    "sha256": "421b9ffbae63713c88e1282406e1e672b5022e423de7299edbf43665a8eb7e37",
+    "source": "assets\\xiaohei-full-redraw\\PNG\\02-B-小黑手绘版.png",
+    "width": 1792,
+    "height": 1008
+  },
+  {
+    "chart": "C",
+    "file": "03-directed-search.png",
+    "sha256": "15b2aa0a2701263a461a326d1cfa30f32eaf00bed3f5813881fc06f93fbd6fef",
+    "source": "assets\\xiaohei-full-redraw\\PNG\\03-C-小黑手绘版.png",
+    "width": 1792,
+    "height": 1008
+  },
+  {
+    "chart": "D",
+    "file": "04-warning-review.png",
+    "sha256": "f5b61f0c0baed8562c41ad247e6fd6dff540c39eacd48350eab22bcdbbdaef05",
+    "source": "assets\\xiaohei-full-redraw\\PNG\\04-D-小黑手绘版.png",
+    "width": 1792,
+    "height": 1008
+  },
+  {
+    "chart": "E",
+    "file": "05-rule-refinement.png",
+    "sha256": "77bc441d7120fe0e815155e9cd7cab11381f2b1511d92a6c3e41867d6443f344",
+    "source": "assets\\xiaohei-full-redraw\\PNG\\05-E-小黑手绘版.png",
+    "width": 1792,
+    "height": 1008
+  },
+  {
+    "chart": "F",
+    "file": "06-document-languages.png",
+    "sha256": "a27ae61eb908951625d5163098901658f51c8e2bc532dfd6e7db610993fd3f36",
+    "source": "assets\\xiaohei-full-redraw\\PNG\\06-F-小黑手绘版.png",
+    "width": 1792,
+    "height": 1008
+  },
+  {
+    "chart": "G1",
+    "file": "07-run-evidence.png",
+    "sha256": "407dfc85cbb0c82f1a3f09229a08c47ca1c8b327eddf5a5fe00f1584fbc2c400",
+    "source": "assets\\xiaohei-full-redraw\\PNG\\07-G1-小黑手绘版.png",
+    "width": 1792,
+    "height": 1008
+  },
+  {
+    "chart": "G2",
+    "file": "08-request-trace.png",
+    "sha256": "d03b6b4c634daf05c73dacd3db4c2be564fdcad018969f1ce308434098450b83",
+    "source": "assets\\xiaohei-full-redraw\\PNG\\08-G2-小黑手绘版.png",
+    "width": 1792,
+    "height": 1008
+  }
+]

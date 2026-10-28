@@ -1,0 +1,9 @@
+| 位置 | 符号 | 判定 | 证据 |
+|---|---|---|---|
+| L5 | `asyncio.WindowsSelectorEventLoopPolicy` | ⚠️ 已弃用 | following classes and functions are deprecated: asyncio.AbstractEventLoopPolicy asyncio.DefaultEventLoopPolicy asyncio.W (https://docs.python.org/id/3.15/deprecations/pending-removal-in-3.16.html) |
+| L5 | `asyncio.set_event_loop_policy` | ⚠️ 已弃用 | 自 3.14 版本弃用: set_event_loop_policy() 函数已弃用,并将在 Python 3.16 中删除。 (https://docs.python.org/zh-cn/3.14/library/asyncio-policy.html) |
+| L9 | `asyncio.sleep` | · 文档提及，无变更描述 |  |
+| L13 | `asyncio.run` | · 文档提及，无变更描述 |  |
+| L1 | `asyncio` | · 官方文档未检出 |  |
+| L2 | `sys` | · 官方文档未检出 |  |
+| L4 | `sys.platform` | · 官方文档未检出 |  |

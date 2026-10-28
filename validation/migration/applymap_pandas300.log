@@ -1,0 +1,16 @@
+pd-applymap: one real migration demonstration
+Python 3.12.3; pandas 3.0.0
+Input: original answer's fixed migration demonstration fixture, not business data
+{"A": [1, 2, 3], "B": [4, 5, 6]}
+Source: answers/qwen3.8-27b.json / pd-applymap.text
+answer_text_sha256: e6b20bde5c902093d4f7889e2c73d52203dc4adce7a0fca49c9e9c4132d19c25
+Change: exactly one .applymap( -> .map(; lambda x: x * 2 unchanged
+Old run: AttributeError: 'DataFrame' object has no attribute 'applymap'
+New run: success
+   A   B
+0  2   8
+1  4  10
+2  6  12
+Checks: same input/function; output equals elementwise doubling; source answer unchanged
+Saved search evidence: pandas 2.1 deprecated (not target-version removal proof)
+Target-version source: https://pandas.pydata.org/docs/whatsnew/v3.0.0.html (GH 52364)

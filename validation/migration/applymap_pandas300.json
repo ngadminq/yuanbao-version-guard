@@ -1,0 +1,91 @@
+{
+  "case_id": "pd-applymap",
+  "scope": "One migration demonstration; not a new 32-case evaluation",
+  "environment": {
+    "python": "3.12.3",
+    "pandas": "3.0.0"
+  },
+  "portable_reproduction_command": "uv run --python 3.12 --with pandas==3.0.0 python examples/migrate_applymap.py",
+  "source": {
+    "file": "answers/qwen3.8-27b.json",
+    "selector": "pd-applymap.text / first fenced Python block",
+    "answer_text_sha256": "e6b20bde5c902093d4f7889e2c73d52203dc4adce7a0fca49c9e9c4132d19c25",
+    "python_block_sha256": "f045944a1befb180c676faef8f46f331cd00bc5f3398b41d4986fd71e4502a58",
+    "source_file_sha256_reference_only": "85f040f325575702f756a779513ae1eca229c9a9cb4580646c2c77f4cb37a838",
+    "hash_note": "Whole-file hash is reference only: publication may redact endpoint_host metadata; answer text is the stable comparison unit.",
+    "answer_text": "\n\n```python\nimport pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2, 3], \"B\": [4, 5, 6]})\n\nresult = df.applymap(lambda x: x * 2)\n# pandas >= 2.1.0 可用 df.map(lambda x: x * 2)\n\nprint(result)\n```"
+  },
+  "input_note": "The original model answer's fixed three-row migration demonstration input, not business data.",
+  "input": {
+    "A": [
+      1,
+      2,
+      3
+    ],
+    "B": [
+      4,
+      5,
+      6
+    ]
+  },
+  "change": {
+    "from": ".applymap(",
+    "to": ".map(",
+    "occurrences_replaced": 1,
+    "function_unchanged": "lambda x: x * 2",
+    "other_code_unchanged": true
+  },
+  "old_code": "import pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2, 3], \"B\": [4, 5, 6]})\n\nresult = df.applymap(lambda x: x * 2)\n# pandas >= 2.1.0 可用 df.map(lambda x: x * 2)\n\nprint(result)\n",
+  "new_code": "import pandas as pd\n\ndf = pd.DataFrame({\"A\": [1, 2, 3], \"B\": [4, 5, 6]})\n\nresult = df.map(lambda x: x * 2)\n# pandas >= 2.1.0 可用 df.map(lambda x: x * 2)\n\nprint(result)\n",
+  "old_run": {
+    "success": false,
+    "exception": {
+      "type": "AttributeError",
+      "message": "'DataFrame' object has no attribute 'applymap'"
+    },
+    "stdout": ""
+  },
+  "new_run": {
+    "success": true,
+    "exception": null,
+    "stdout": "   A   B\n0  2   8\n1  4  10\n2  6  12\n",
+    "result": {
+      "A": [
+        2,
+        4,
+        6
+      ],
+      "B": [
+        8,
+        10,
+        12
+      ]
+    }
+  },
+  "existing_search_evidence": {
+    "file": "data/probe.json",
+    "selector": "rows[id=pd-applymap].top_evidence[0]",
+    "verdict": "deprecated",
+    "url": "https://pandas.pydata.org/pandas-docs/version/2.1/reference/api/pandas.DataFrame.applymap.html",
+    "sentence": "Deprecated since version 2.1.0: DataFrame.applymap has been deprecated.",
+    "note": "Saved search evidence says deprecated in 2.1; it does not establish removal in target pandas 3.0."
+  },
+  "official_migration_sources": [
+    {
+      "url": "https://pandas.pydata.org/docs/whatsnew/v3.0.0.html",
+      "locator": "Removal of prior version deprecations; GH 52364",
+      "fact": "pandas 3.0.0 removes DataFrame.applymap, Styler.applymap and Styler.applymap_index."
+    },
+    {
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.map.html",
+      "locator": "Added in version 2.1.0 / method description",
+      "fact": "DataFrame.applymap was deprecated and renamed to DataFrame.map; map applies a scalar function elementwise."
+    }
+  ],
+  "checks": {
+    "old_attribute_error_observed": true,
+    "new_run_succeeded": true,
+    "same_input_and_function": true,
+    "source_answer_unchanged": true
+  }
+}

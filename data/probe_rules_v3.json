@@ -1,0 +1,826 @@
+{
+  "recorded_at": "2026-10-27T09:55:25.725045+08:00",
+  "cases": 28,
+  "with_official_pages": 28,
+  "change_detected": 20,
+  "status_exact": 17,
+  "rows": [
+    {
+      "id": "py-utcnow",
+      "query": "python datetime utcnow deprecated",
+      "site": "docs.python.org",
+      "request_id": "834af036-be20-400d-9df6-b89965be3116",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "deprecated",
+      "expected": "deprecated",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/zh-cn/3.15/deprecations/index.html",
+          "title": "弃用¶",
+          "date": "",
+          "version": "3.15",
+          "status": "deprecated",
+          "sentence": "传入一个复数作为complex()构造器中的 real 或 imag 参数的做法现在已被弃用;它应当仅作为单个位置参数被传入。(由Serhiy Storchaka 在gh-109218中贡献。) utcnow() : 使用 datetime.datetime.now(tz=datetime.UTC) 。"
+        },
+        {
+          "url": "https://docs.python.org/zh-tw/3.12/deprecations/index.html",
+          "title": "已棄用項目",
+          "date": "",
+          "version": "3.12",
+          "status": "deprecated",
+          "sentence": "datetime: utcnow():請改用 datetime.datetime.now(tz=datetime.UTC)。"
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.12.html"
+    },
+    {
+      "id": "py-distutils",
+      "query": "python distutils removed",
+      "site": "docs.python.org",
+      "request_id": "fc56680f-7c3e-49c0-8003-7bb8bebb62ab",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/es/3/library/distutils.html",
+          "title": "distutils — Building and installing Python modules",
+          "date": "",
+          "version": null,
+          "status": "breaking",
+          "sentence": "distutils — Building and installing Python modules Python Documentation。distutils — Building and installing Python modules¶ Deprecated since version 3.10, removed in version 3.12."
+        },
+        {
+          "url": "https://docs.python.org/es/3/library/distutils.html",
+          "title": "distutils — Building and installing Python modules",
+          "date": "",
+          "version": null,
+          "status": "breaking",
+          "sentence": "distutils — Building and installing Python modules¶ Deprecated since version 3.10, removed in version 3.12."
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.12.html"
+    },
+    {
+      "id": "py-imp",
+      "query": "python imp module removed importlib",
+      "site": "docs.python.org",
+      "request_id": "638878da-4855-4ad9-8268-6c316f19ee90",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/zh-cn/3.7//library/imp.html",
+          "title": "imp —— 由代码内部访问 import ｡",
+          "date": "",
+          "version": "3.7",
+          "status": "breaking",
+          "sentence": "Python Documentation。imp —— 由代码内部访问 import 。¶ 源代码: Lib/imp.py 3.4 版后已移除: imp 模块已被废弃,请改用 importlib。"
+        },
+        {
+          "url": "https://docs.python.org/zh-cn/3.7//library/imp.html",
+          "title": "imp —— 由代码内部访问 import ｡",
+          "date": "",
+          "version": "3.7",
+          "status": "breaking",
+          "sentence": "imp —— 由代码内部访问 import 。¶ 源代码: Lib/imp.py 3.4 版后已移除: imp 模块已被废弃,请改用 importlib。"
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.12.html"
+    },
+    {
+      "id": "py-wrap-socket",
+      "query": "python ssl.wrap_socket removed",
+      "site": "docs.python.org",
+      "request_id": "255c12c3-d96d-417b-8b8e-49878e39ab89",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/zh-tw/3.12/whatsnew/3.12.html",
+          "title": "Python 3.12 有什麼新功能",
+          "date": "",
+          "version": "3.12",
+          "status": "breaking",
+          "sentence": "(Contributed by Victor Stinner in gh-94199.) Remove the ssl.wrap_socket() function, deprecated in Python 3.7: instead, create a ssl.SSLContext object and call its ssl.SSLContext.wrap_socket method."
+        },
+        {
+          "url": "https://docs.python.org/uk/3/whatsnew/3.12.html",
+          "title": "Що нового в Python 3.12",
+          "date": "",
+          "version": null,
+          "status": "breaking",
+          "sentence": "(Contributed by Victor Stinner in gh-94199.) Remove the ssl.wrap_socket() function, deprecated in Python 3.7: instead, create a ssl.SSLContext object and call its ssl.SSLContext.wrap_socket method."
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.12.html"
+    },
+    {
+      "id": "py-safeconfigparser",
+      "query": "python configparser SafeConfigParser removed",
+      "site": "docs.python.org",
+      "request_id": "af52b614-1fcd-45e3-ae3d-cb27c87aa9a0",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/de/3.14/whatsnew/3.12.html",
+          "title": "Was ist Neu in Python 3.12",
+          "date": "",
+          "version": "3.14",
+          "status": "breaking",
+          "sentence": "configparser no longer has a SafeConfigParser class."
+        },
+        {
+          "url": "https://docs.python.org/zh-tw/3.12/whatsnew/3.12.html",
+          "title": "Python 3.12 有什麼新功能",
+          "date": "",
+          "version": "3.12",
+          "status": "breaking",
+          "sentence": "configparser no longer has a SafeConfigParser class."
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.12.html"
+    },
+    {
+      "id": "py-assertequals",
+      "query": "python unittest assertEquals removed alias",
+      "site": "docs.python.org",
+      "request_id": "d1b1220e-95c3-4840-9a26-854ede279afa",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/zh-cn/3.8/library/unittest.html",
+          "title": "unittest --- 单元测试框架¶",
+          "date": "",
+          "version": "3.8",
+          "status": "breaking",
+          "sentence": "下表列出了它们的正确名称和已弃用的别名: 方法名 已弃用的别名 已弃用的别名 assertEqual() failUnlessEqual assertEquals assertNotEqual() failIfEqual assertNotEquals assertTrue() failUnless assert_ assertFalse() failIf assertRaises() failUnlessRaises assertAlmostEqual() failUnlessAlmostEqual assertAlmostEquals assertNotAlmostEqual() fail"
+        },
+        {
+          "url": "https://docs.python.org//3.7/library/unittest.html",
+          "title": "unittest — Unit testing framework¶",
+          "date": "",
+          "version": "3.7",
+          "status": "deprecated",
+          "sentence": "The following table lists the correct names along with their deprecated aliases: Method Name Deprecated alias Deprecated alias assertEqual() failUnlessEqual assertEquals assertNotEqual() failIfEqual assertNotEquals assertTrue() failUnless assert_ assertFalse() failIf assertRaises() failUnlessRaises "
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.12.html"
+    },
+    {
+      "id": "py-cgi",
+      "query": "python cgi module removed 3.13",
+      "site": "docs.python.org",
+      "request_id": "5d9d0e97-97ed-499b-a9ed-ff9e30bbf788",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/ro/3.13/library/cgi.html",
+          "title": "cgi — Common Gateway Interface support",
+          "date": "",
+          "version": "3.13",
+          "status": "breaking",
+          "sentence": "cgi — Common Gateway Interface support。cgi — Common Gateway Interface support¶ Deprecated since version 3.11, removed in version 3.13."
+        },
+        {
+          "url": "https://docs.python.org/ro/3.13/library/cgi.html",
+          "title": "cgi — Common Gateway Interface support",
+          "date": "",
+          "version": "3.13",
+          "status": "breaking",
+          "sentence": "This is a copy of the cgi module, no longer maintained or supported by the core Python team."
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.13.html"
+    },
+    {
+      "id": "py-telnetlib",
+      "query": "python telnetlib removed 3.13",
+      "site": "docs.python.org",
+      "request_id": "f1948acd-21e6-41a4-8d8d-6d44f8c4ca98",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/zh-tw/3.13/library/telnetlib.html",
+          "title": "telnetlib --- Telnet 用戶端",
+          "date": "",
+          "version": "3.13",
+          "status": "breaking",
+          "sentence": "telnetlib --- Telnet 用戶端 Python Documentation。Deprecated since version 3.11, removed in version 3.13."
+        },
+        {
+          "url": "https://docs.python.org/sv/3.13/library/telnetlib.html",
+          "title": "telnetlib — Telnet client",
+          "date": "",
+          "version": "3.13",
+          "status": "breaking",
+          "sentence": "telnetlib — Telnet client。telnetlib — Telnet client¶ Deprecated since version 3.11, removed in version 3.13."
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.13.html"
+    },
+    {
+      "id": "py-pipes",
+      "query": "python pipes module removed shlex.quote",
+      "site": "docs.python.org",
+      "request_id": "7b4d59e2-d1e7-401a-97a2-d5b305093dc9",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/zh-cn/2/library/pipes.html",
+          "title": "36.11. pipes — 终端管道接口",
+          "date": "",
+          "version": null,
+          "status": "breaking",
+          "sentence": "示例: >>> import pipes >>> t = pipes.Template() >>> t.append('tr a-z A-Z', '--') >>> f = t.open('pipefile', 'w') >>> f.write('hello world') >>> f.close() >>> open('pipefile').read() 'HELLO WORLD' pipes.quote(s)¶ 2.7 版后已移除: Prior to Python 2.7, this function was not publicly documented."
+        },
+        {
+          "url": "https://docs.python.org/zh-cn/2/library/pipes.html",
+          "title": "36.11. pipes — 终端管道接口",
+          "date": "",
+          "version": null,
+          "status": "breaking",
+          "sentence": "示例: >>> import pipes >>> t = pipes.Template() >>> t.append('tr a-z A-Z', '--') >>> f = t.open('pipefile', 'w') >>> f.write('hello world') >>> f.close() >>> open('pipefile').read() 'HELLO WORLD' pipes.quote(s)¶ 2.7 版后已移除: Prior to Python 2.7, this function was not publicly documented."
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.13.html"
+    },
+    {
+      "id": "py-imghdr",
+      "query": "python imghdr removed 3.13",
+      "site": "docs.python.org",
+      "request_id": "affb43cb-e911-408e-9102-a8ed0f1f7f91",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/zh-tw/3.13/library/imghdr.html",
+          "title": "imghdr --- 判定圖片種類",
+          "date": "",
+          "version": "3.13",
+          "status": "breaking",
+          "sentence": "imghdr --- 判定圖片種類 Python Documentation。imghdr --- 判定圖片種類¶ Deprecated since version 3.11, removed in version 3.13."
+        },
+        {
+          "url": "https://docs.python.org/zh-tw/3.13/library/imghdr.html",
+          "title": "imghdr --- 判定圖片種類",
+          "date": "",
+          "version": "3.13",
+          "status": "breaking",
+          "sentence": "imghdr --- 判定圖片種類¶ Deprecated since version 3.11, removed in version 3.13."
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.13.html"
+    },
+    {
+      "id": "py-get-event-loop",
+      "query": "python asyncio get_event_loop RuntimeError 3.14",
+      "site": "docs.python.org",
+      "request_id": "d0f1a1dd-85de-4f3e-9d3d-578ea03dd9d9",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/bn-in/3/whatsnew/3.14.html",
+          "title": "What's new in Python 3.14¶",
+          "date": "",
+          "version": null,
+          "status": "breaking",
+          "sentence": "What's new in Python 3.14¶ Python官方文档。) asyncio ¶ Remove the following classes, methods, and functions,which have been deprecated since Python 3.12: AbstractChildWatcher FastChildWatcher MultiLoopChildWatcher PidfdChildWatcher SafeChildWatcher ThreadedChildWatcher AbstractEventLoopPolicy.get_child_w"
+        },
+        {
+          "url": "https://docs.python.org/id/3/whatsnew/3.14.html",
+          "title": "What's new in Python 3.14¶",
+          "date": "",
+          "version": null,
+          "status": "breaking",
+          "sentence": "What's new in Python 3.14¶ Python官方文档。) asyncio ¶ Remove the following classes, methods, and functions,which have been deprecated since Python 3.12: AbstractChildWatcher FastChildWatcher MultiLoopChildWatcher PidfdChildWatcher SafeChildWatcher ThreadedChildWatcher AbstractEventLoopPolicy.get_child_w"
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.14.html"
+    },
+    {
+      "id": "py-ast-num",
+      "query": "python ast.Num removed 3.14 Constant",
+      "site": "docs.python.org",
+      "request_id": "e15bb8f4-050c-4868-9bba-ed9d11f63658",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/zh-cn/3/library/ast.html",
+          "title": "ast --- 抽象语法树",
+          "date": "",
+          "version": null,
+          "status": "breaking",
+          "sentence": "从 3.8 版起已弃用,已在 3.14 版中移除: 之前版本的 Python 提供了 AST 类 ast.Num, ast.Str, ast.Bytes, ast.NameConstant 和 ast.Ellipsis,它们在 Python 3.8 中被弃用。这些类在 Python 3.14 中已被移除,其功能被 ast.Constant 代替。"
+        },
+        {
+          "url": "https://docs.python.org/zh-cn/3.13//deprecations/index.html",
+          "title": "弃用",
+          "date": "",
+          "version": "3.13",
+          "status": "deprecated",
+          "sentence": "(由 Nikita Sobolev 在 gh-92248 中贡献。) ast: 以下特性自 Python 3.8 起已在文档中声明弃用,现在当运行时如果它们被访问或使用时将发出 DeprecationWarning,并将在 Python 3.14 中移除: ast.Num ast.Str ast.Bytes ast.NameConstant ast.Ellipsis 请改用 ast.Constant。"
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.14.html"
+    },
+    {
+      "id": "py-loop-policy",
+      "query": "python asyncio set_event_loop_policy deprecated",
+      "site": "docs.python.org",
+      "request_id": "80b67be3-e1bd-4ea8-924b-9b3583a780de",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "deprecated",
+      "expected": "deprecated",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/zh-cn/3.14/library/asyncio-policy.html",
+          "title": "策略",
+          "date": "",
+          "version": "3.14",
+          "status": "deprecated",
+          "sentence": "自 3.14 版本弃用: set_event_loop_policy() 函数已弃用,并将在 Python 3.16 中删除。"
+        },
+        {
+          "url": "https://docs.python.org/zh-cn/3.14/library/asyncio-policy.html",
+          "title": "策略",
+          "date": "",
+          "version": "3.14",
+          "status": "deprecated",
+          "sentence": "自 3.14 版本弃用: set_event_loop_policy() 函数已弃用,并将在 Python 3.16 中删除。"
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.14.html"
+    },
+    {
+      "id": "py-sqlite-version",
+      "query": "python sqlite3 version version_info removed",
+      "site": "docs.python.org",
+      "request_id": "9fe986c6-0434-4459-a4a4-31d4b5ad5d3b",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "mentioned",
+      "expected": "breaking",
+      "detected": false,
+      "exact": false,
+      "top_evidence": [
+        {
+          "url": "https://docs.python.org/zh-cn/3.12//library/sqlite3.html",
+          "title": "sqlite3 --- SQLite 数据库的 DB-API 2.0 接口",
+          "date": "",
+          "version": "3.12",
+          "status": "mentioned",
+          "sentence": "sqlite3.version¶ 此模块 字符串 形式的版本号。"
+        },
+        {
+          "url": "https://docs.python.org/zh-cn/3.12/library/sqlite3.html",
+          "title": "sqlite3 --- SQLite 数据库的 DB-API 2.0 接口",
+          "date": "",
+          "version": "3.12",
+          "status": "mentioned",
+          "sentence": "sqlite3.version¶ 此模块 字符串 形式的版本号。"
+        }
+      ],
+      "source": "https://docs.python.org/3/whatsnew/3.14.html"
+    },
+    {
+      "id": "pd-append",
+      "query": "pandas DataFrame.append removed concat",
+      "site": "pandas.pydata.org",
+      "request_id": "d502680f-395c-45d6-88a3-e109719ccbc4",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "deprecated",
+      "expected": "breaking",
+      "detected": true,
+      "exact": false,
+      "top_evidence": [
+        {
+          "url": "https://pandas.pydata.org/pandas-docs/version/1.5/reference/api/pandas.DataFrame.append.html",
+          "title": "pandas.DataFrame.append",
+          "date": "",
+          "version": "1.5",
+          "status": "deprecated",
+          "sentence": "For further details see Deprecated DataFrame.append and Series.append Columns in other that are not in the caller are added as new columns."
+        },
+        {
+          "url": "https://pandas.pydata.org/pandas-docs/version/1.5/reference/api/pandas.DataFrame.append.html",
+          "title": "pandas.DataFrame.append",
+          "date": "",
+          "version": "1.5",
+          "status": "deprecated",
+          "sentence": "For further details see Deprecated DataFrame.append and Series.append Columns in other that are not in the caller are added as new columns."
+        }
+      ],
+      "source": "https://pandas.pydata.org/docs/whatsnew/v2.0.0.html"
+    },
+    {
+      "id": "pd-applymap",
+      "query": "pandas DataFrame.applymap removed map",
+      "site": "pandas.pydata.org",
+      "request_id": "04e22b5c-2b4b-4254-ba1e-b76e85ce0a33",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "deprecated",
+      "expected": "breaking",
+      "detected": true,
+      "exact": false,
+      "top_evidence": [
+        {
+          "url": "https://pandas.pydata.org/pandas-docs/version/2.1/reference/api/pandas.DataFrame.applymap.html",
+          "title": "pandas.DataFrame.applymap",
+          "date": "",
+          "version": "2.1",
+          "status": "deprecated",
+          "sentence": "Deprecated since version 2.1.0: DataFrame.applymap has been deprecated."
+        },
+        {
+          "url": "https://pandas.pydata.org/pandas-docs/version/2.1/reference/api/pandas.DataFrame.applymap.html",
+          "title": "pandas.DataFrame.applymap",
+          "date": "",
+          "version": "2.1",
+          "status": "deprecated",
+          "sentence": "Deprecated since version 2.1.0: DataFrame.applymap has been deprecated."
+        }
+      ],
+      "source": "https://pandas.pydata.org/docs/whatsnew/v3.0.0.html"
+    },
+    {
+      "id": "pd-fillna-method",
+      "query": "pandas fillna method keyword removed ffill",
+      "site": "pandas.pydata.org",
+      "request_id": "2d715260-6fda-40cf-a643-075124d37343",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "mentioned",
+      "expected": "breaking",
+      "detected": false,
+      "exact": false,
+      "top_evidence": [
+        {
+          "url": "https://pandas.pydata.org/pandas-docs/version/2.3/reference/api/pandas.api.extensions.ExtensionArray.fillna.html",
+          "title": "pandas.api.extensions.ExtensionArray.fillna",
+          "date": "",
+          "version": "2.3",
+          "status": "mentioned",
+          "sentence": "pandas.api.extensions.ExtensionArray.fillna pandas。ExtensionArray.fillna(value=None, method=None, limit=None, copy=True)[source]# Fill NA/NaN values using the specified method."
+        },
+        {
+          "url": "https://pandas.pydata.org/pandas-docs/version/2.3/reference/api/pandas.api.extensions.ExtensionArray.fillna.html",
+          "title": "pandas.api.extensions.ExtensionArray.fillna",
+          "date": "",
+          "version": "2.3",
+          "status": "mentioned",
+          "sentence": "ExtensionArray.fillna(value=None, method=None, limit=None, copy=True)[source]# Fill NA/NaN values using the specified method."
+        }
+      ],
+      "source": "https://pandas.pydata.org/docs/whatsnew/v3.0.0.html"
+    },
+    {
+      "id": "pd-delim-whitespace",
+      "query": "pandas read_csv delim_whitespace removed",
+      "site": "pandas.pydata.org",
+      "request_id": "e27ddfb6-e9fd-451d-b6ff-60cb19e6af13",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "mentioned",
+      "expected": "breaking",
+      "detected": false,
+      "exact": false,
+      "top_evidence": [
+        {
+          "url": "https://pandas.pydata.org/pandas-docs/version/2.1.4/reference/api/pandas.read_csv.html?utm_source=openai",
+          "title": "pandas.read_csv#",
+          "date": "",
+          "version": "2.1.4",
+          "status": "mentioned",
+          "sentence": "pandas.read_csv# pandas.read_csv(filepath_or_buffer, , sep=_NoDefault.no_default, delimiter=None, header='infer', names=_NoDefault.no_default, index_col=None, usecols=None, dtype=None, engine=None, converters=None, true_values=None, false_values=None, skipinitialspace=False, skiprows=None, skipfoote"
+        },
+        {
+          "url": "https://pandas.pydata.org/pandas-docs/version/3.1/whatsnew/v0.14.0.html",
+          "title": "Version 0.14.0 (May 31 , 2014)#",
+          "date": "",
+          "version": "3.1",
+          "status": "mentioned",
+          "sentence": "Raise ValueError when sep specified with delim_whitespace=True in read_csv()/read_table() (GH 6607) Raise ValueError when engine='c' specified with unsupported options in read_csv()/read_table() (GH 6607) Raise ValueError when fallback to python parser causes options to be ignored (GH 6607) Produce "
+        }
+      ],
+      "source": "https://pandas.pydata.org/docs/whatsnew/v3.0.0.html"
+    },
+    {
+      "id": "pd-freq-h",
+      "query": "pandas frequency alias H deprecated h",
+      "site": "pandas.pydata.org",
+      "request_id": "66bd3c61-b796-485e-b89d-9a214446772f",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "no_evidence",
+      "expected": "breaking",
+      "detected": false,
+      "exact": false,
+      "top_evidence": [],
+      "source": "https://pandas.pydata.org/docs/whatsnew/v3.0.0.html"
+    },
+    {
+      "id": "pd-resample-m",
+      "query": "pandas resample alias M removed ME MonthEnd",
+      "site": "pandas.pydata.org",
+      "request_id": "a211c2d0-d3da-4e28-8ea2-8c454075361d",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "no_evidence",
+      "expected": "breaking",
+      "detected": false,
+      "exact": false,
+      "top_evidence": [],
+      "source": "https://pandas.pydata.org/docs/whatsnew/v3.0.0.html"
+    },
+    {
+      "id": "pd-groupby-axis",
+      "query": "pandas groupby axis argument removed",
+      "site": "pandas.pydata.org",
+      "request_id": "03afaa3a-415a-43db-8336-92f914fab5d0",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "mentioned",
+      "expected": "breaking",
+      "detected": false,
+      "exact": false,
+      "top_evidence": [
+        {
+          "url": "https://pandas.pydata.org/pandas-docs/version/2.1/reference/api/pandas.DataFrame.groupby.html",
+          "title": "pandas.DataFrame.groupby",
+          "date": "",
+          "version": "2.1",
+          "status": "mentioned",
+          "sentence": "pandas.DataFrame.groupby pandas。pandas.DataFrame.groupby# DataFrame.groupby(by=None, axis=_NoDefault.no_default, level=None, as_index=True, sort=True, group_keys=True, observed=_NoDefault.no_default, dropna=True)[source]# Group DataFrame using a mapper or by a Series of columns."
+        },
+        {
+          "url": "https://pandas.pydata.org/pandas-docs/version/2.1/reference/api/pandas.DataFrame.groupby.html",
+          "title": "pandas.DataFrame.groupby",
+          "date": "",
+          "version": "2.1",
+          "status": "mentioned",
+          "sentence": "pandas.DataFrame.groupby# DataFrame.groupby(by=None, axis=_NoDefault.no_default, level=None, as_index=True, sort=True, group_keys=True, observed=_NoDefault.no_default, dropna=True)[source]# Group DataFrame using a mapper or by a Series of columns."
+        }
+      ],
+      "source": "https://pandas.pydata.org/docs/whatsnew/v3.0.0.html"
+    },
+    {
+      "id": "np-float_",
+      "query": "numpy np.float_ removed numpy 2.0",
+      "site": "numpy.org",
+      "request_id": "73a13df6-34a5-44a9-aa4e-2e97ec27107d",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "no_evidence",
+      "expected": "breaking",
+      "detected": false,
+      "exact": false,
+      "top_evidence": [],
+      "source": "https://numpy.org/doc/stable/numpy_2_0_migration_guide.html"
+    },
+    {
+      "id": "np-nan",
+      "query": "numpy np.NaN removed numpy 2.0 np.nan",
+      "site": "numpy.org",
+      "request_id": "b7b310a1-90ae-42d4-b915-16dd371a921b",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "mentioned",
+      "expected": "breaking",
+      "detected": false,
+      "exact": false,
+      "top_evidence": [
+        {
+          "url": "https://numpy.org/doc/stable/reference/generated/numpy.any.html?highlight=numpy%20any",
+          "title": "numpy.any#",
+          "date": "",
+          "version": "stable",
+          "status": "mentioned",
+          "sentence": "Notes Not a Number (NaN), positive infinity and negative infinity evaluate to True because these are not equal to zero."
+        },
+        {
+          "url": "https://numpy.org/doc/2.2/reference/generated/numpy.nanstd.html",
+          "title": "numpy.nanstd",
+          "date": "",
+          "version": "2.2",
+          "status": "mentioned",
+          "sentence": "Returns the standard deviation, a measure of the spread of a distribution, of the non-NaN array elements."
+        }
+      ],
+      "source": "https://numpy.org/doc/stable/numpy_2_0_migration_guide.html"
+    },
+    {
+      "id": "np-product",
+      "query": "numpy np.product cumproduct removed 2.0",
+      "site": "numpy.org",
+      "request_id": "11f917f5-efc1-4b0f-8cf2-6802e683416c",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "deprecated",
+      "expected": "breaking",
+      "detected": true,
+      "exact": false,
+      "top_evidence": [
+        {
+          "url": "https://numpy.org/doc/stable/release/1.25.0-notes",
+          "title": "NumPy 1.25.0 Release Notes",
+          "date": "",
+          "version": "stable",
+          "status": "deprecated",
+          "sentence": "(gh-23302) np.product is deprecated."
+        },
+        {
+          "url": "https://numpy.org/doc/1.13/reference/generated/numpy.prod.html",
+          "title": "numpy.prod",
+          "date": "",
+          "version": "1.13",
+          "status": "mentioned",
+          "sentence": "numpy.prod¶ numpy.prod(a, axis=None, dtype=None, out=None, keepdims=)[source]¶ Return the product of array elements over a given axis."
+        }
+      ],
+      "source": "https://numpy.org/doc/stable/numpy_2_0_migration_guide.html"
+    },
+    {
+      "id": "np-trapz",
+      "query": "numpy trapz deprecated trapezoid",
+      "site": "numpy.org",
+      "request_id": "28d70dd2-f788-416d-bda5-e0f5839afa4e",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "deprecated",
+      "expected": "deprecated",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://numpy.org/doc/2.1/numpy_2_0_migration_guide.html",
+          "title": "NumPy 2.0 migration guide",
+          "date": "",
+          "version": "2.1",
+          "status": "deprecated",
+          "sentence": "trapz Use np.trapezoid or a scipy.integrate function instead."
+        },
+        {
+          "url": "https://numpy.org/doc/1.21/reference/generated/numpy.trapz.html",
+          "title": "numpy.trapz",
+          "date": "",
+          "version": "1.21",
+          "status": "mentioned",
+          "sentence": "numpy.trapz"
+        }
+      ],
+      "source": "https://numpy.org/doc/stable/numpy_2_0_migration_guide.html"
+    },
+    {
+      "id": "np-in1d",
+      "query": "numpy in1d deprecated isin",
+      "site": "numpy.org",
+      "request_id": "2c8363ff-141a-4fbd-b495-425c0d2dad28",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "deprecated",
+      "expected": "deprecated",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://numpy.org/doc/2.1/numpy_2_0_migration_guide.html",
+          "title": "NumPy 2.0 migration guide",
+          "date": "",
+          "version": "2.1",
+          "status": "deprecated",
+          "sentence": "The next table presents deprecated members, which will be removed in a release after 2.0: deprecated member migration guideline in1d Use np.isin instead."
+        },
+        {
+          "url": "https://numpy.org/doc/2.1/reference/generated/numpy.in1d.html",
+          "title": "numpy.in1d",
+          "date": "",
+          "version": "2.1",
+          "status": "mentioned",
+          "sentence": "numpy.in1d"
+        }
+      ],
+      "source": "https://numpy.org/doc/stable/numpy_2_0_migration_guide.html"
+    },
+    {
+      "id": "lc-react-agent",
+      "query": "langgraph create_react_agent deprecated create_agent",
+      "site": "docs.langchain.com",
+      "request_id": "89cff2ed-8e63-4a9a-9cee-964f2f76bdb9",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "deprecated",
+      "expected": "deprecated",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://docs.langchain.com/oss/python/migrate/langgraph-v1",
+          "title": "LangGraph v1 migration guide",
+          "date": "",
+          "version": null,
+          "status": "deprecated",
+          "sentence": "The main change is the deprecation of create_react_agent in favor of LangChain’s new create_agent function."
+        },
+        {
+          "url": "https://docs.langchain.com/oss/python/migrate/langgraph-v1",
+          "title": "LangGraph v1 migration guide",
+          "date": "",
+          "version": null,
+          "status": "deprecated",
+          "sentence": "Deprecations The following table lists all items deprecated in LangGraph v1: Deprecated item Alternative create_react_agent langchain.agents.create_agent AgentState langchain.agents.AgentState AgentStatePydantic langchain.agents.AgentState(no more pydantic state) ..."
+        }
+      ],
+      "source": "https://docs.langchain.com/oss/python/migrate/langgraph-v1"
+    },
+    {
+      "id": "oa-assistants",
+      "query": "OpenAI Assistants API deprecated Responses API",
+      "site": "developers.openai.com",
+      "request_id": "901a8cd5-698d-44ca-9075-582fb7d41d68",
+      "returned": 10,
+      "official_pages": 10,
+      "verdict": "breaking",
+      "expected": "breaking",
+      "detected": true,
+      "exact": true,
+      "top_evidence": [
+        {
+          "url": "https://developers.openai.com/api/reference/resources/beta/subresources/threads/subresources/runs/methods/cancel",
+          "title": "Assistants migration guide",
+          "date": "",
+          "version": null,
+          "status": "breaking",
+          "sentence": "Assistants migration guide OpenAI Developers。Assistants migration guide The Assistants API was sunset on August 26, 2026."
+        },
+        {
+          "url": "https://developers.openai.com/api/reference/resources/beta/subresources/threads/subresources/runs/methods/cancel",
+          "title": "Assistants migration guide",
+          "date": "",
+          "version": null,
+          "status": "breaking",
+          "sentence": "The Assistants API was officially sunset on August 26, 2026, and is no longer available."
+        }
+      ],
+      "source": "https://developers.openai.com/api/docs/deprecations"
+    }
+  ]
+}

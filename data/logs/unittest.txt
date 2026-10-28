@@ -1,0 +1,29 @@
+test_code_blocks (test_version_guard.ExtractTest.test_code_blocks) ... ok
+test_generic_names_skipped (test_version_guard.ExtractTest.test_generic_names_skipped) ... ok
+test_keyword_on_unknown_receiver (test_version_guard.ExtractTest.test_keyword_on_unknown_receiver) ... ok
+test_query_length (test_version_guard.ExtractTest.test_query_length) ... ok
+test_removed_module_import_is_a_symbol (test_version_guard.ExtractTest.test_removed_module_import_is_a_symbol) ... ok
+test_resolves_aliases_and_from_imports (test_version_guard.ExtractTest.test_resolves_aliases_and_from_imports) ... ok
+test_third_party_top_module_not_searched (test_version_guard.ExtractTest.test_third_party_top_module_not_searched) ... ok
+test_unknown_receiver_methods_attach_to_third_party_lib (test_version_guard.ExtractTest.test_unknown_receiver_methods_attach_to_third_party_lib) ... ok
+test_variable_tied_to_creating_library (test_version_guard.ExtractTest.test_variable_tied_to_creating_library) ... ok
+test_code_symbol_must_look_like_code (test_version_guard.JudgeTest.test_code_symbol_must_look_like_code) ... ok
+test_migration_table_row (test_version_guard.JudgeTest.test_migration_table_row) ... ok
+test_module_function_matched_by_name (test_version_guard.JudgeTest.test_module_function_matched_by_name) ... ok
+test_module_needs_module_context (test_version_guard.JudgeTest.test_module_needs_module_context) ... ok
+test_non_official_domain_ignored (test_version_guard.JudgeTest.test_non_official_domain_ignored) ... ok
+test_normal_error_behaviour_is_not_a_change (test_version_guard.JudgeTest.test_normal_error_behaviour_is_not_a_change) ... ok
+test_owner_class_is_not_flagged (test_version_guard.JudgeTest.test_owner_class_is_not_flagged) ... ok
+test_pending_removal_is_deprecated (test_version_guard.JudgeTest.test_pending_removal_is_deprecated) ... ok
+test_possessive_owner_not_flagged (test_version_guard.JudgeTest.test_possessive_owner_not_flagged) ... ok
+test_prose_remove_is_not_removal (test_version_guard.JudgeTest.test_prose_remove_is_not_removal) ... ok
+test_removed_sentence (test_version_guard.JudgeTest.test_removed_sentence) ... ok
+test_replacement_is_not_flagged (test_version_guard.JudgeTest.test_replacement_is_not_flagged) ... ok
+test_section_label_not_flagged (test_version_guard.JudgeTest.test_section_label_not_flagged) ... ok
+test_status_word_must_be_near_symbol (test_version_guard.JudgeTest.test_status_word_must_be_near_symbol) ... ok
+test_strict_then_loose (test_version_guard.JudgeTest.test_strict_then_loose) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.014s
+
+OK
