@@ -221,6 +221,7 @@ JSON 保存了原回答文本哈希、实际 Python/pandas 版本、输入、原
 | [answers/qwen3.8-27b.json](answers/qwen3.8-27b.json) | 32 份模型原始回答，含历史耗时和 token 用量 |
 | [render_report.py](render_report.py) → [viewer/index.html](viewer/index.html) | 从本地材料生成完整实验报告 |
 | `examples/`、`data/logs/`、`images/` | 示例回答、原始终端日志和报告截图 |
+| `examples/hands-on/`、`images/hands-on/` | 文章第六节实操：Claude（官方元宝搜索 MCP）与 WorkBuddy（官方元宝搜索 Skill）演示用代码的修改前后版本，以及已打码、带标注的截图 |
 | [examples/migrate_applymap.py](examples/migrate_applymap.py)、`validation/migration/` | 固定 pandas 3.0.0 环境的单项迁移执行与证据 |
 | [fix_experiment.py](fix_experiment.py) | 修复实验：9 份过时回答，在“只提醒”和“提醒 + 元宝原文（前 3 条官方摘要）”两种条件下各修 3 次；证据读自缓存，不发起搜索；需要 `--base-url` 和 `--model` |
 | [data/fix_qwen3.8-27b.json](data/fix_qwen3.8-27b.json) | 54 次修复试验的提示条件、证据来源（查询与 RequestId）、模型全文、耗时与评分；A 组 18/27、B 组 27/27 |
